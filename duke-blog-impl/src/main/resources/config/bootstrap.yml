@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: duke-blog
+
+eureka:
+  client:
+    instance-info-replication-interval-seconds: 10   #实例信息复制间隔
+    registry-fetch-interval-seconds: 10
+    fetch-registry: true #表示是否从Eureka Server获取注册信息，默认为true
+    register-with-eureka: true #表示是否将自己注册到Eureka Server，默认为true。
+    service-url:
+      defaultZone: http://${security.user.name:duke}:${security.user.password:duke}@localhost:8761/eureka
+  instance:
+    hostname: ${spring.application.name}
+    appname: ${spring.application.name}
+    instance-id: ${spring.application.name}(${spring.cloud.client.ipAddress}:${server.port}) #注册到注册中心的实例id
+    prefer-ip-address: true #是否使用ip地址
+    lease-renewal-interval-in-seconds: 5 #租期更新时间间隔（默认30秒）
+    lease-expiration-duration-in-seconds: 10  #服务失效时间
+    health-check-url-path: /${management.context-path:/management}/health #健康状态监控地址
+    status-page-url-path: /${management.context-path:/management}/info #信息监控地址

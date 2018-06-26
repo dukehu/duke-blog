@@ -1,0 +1,45 @@
+server:
+  port: 5286
+  context-path: /
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:mysql://47.97.122.119:3306/duke_blog?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: Duke@0417
+    hikari:
+      data-source-properties:
+          cachePrepStmts: true
+          prepStmtCacheSize: 250
+          prepStmtCacheSqlLimit: 2048
+          useServerPrepStmts: true
+
+security:
+  user:
+    name: duke
+    password: duke
+  basic:
+    enabled: false
+
+management:
+  security:
+    enabled: false
+  context-path: /management
+logging:
+  file: ./logs/blog.log
+  level: debug
+
+duke:
+  swagger:
+    enabled: true #开启swagger,默认为开启
+    title: blog api
+    description: 博客项目服务
+    version:
+    termsOfServiceUrl:
+    license:
+    licenseUrl:
+    basePackage: com.duke.microservice.blog
+
+mybatis:
+    mapper-locations: classpath*:mapper/**/*Mapper.xml

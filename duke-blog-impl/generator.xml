@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+
+    <context id="MyBatis3Simple" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+            <property name="suppressDate" value="true" />
+        </commentGenerator>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://47.97.122.119:3306/duke_blog?useUnicode=true&amp;characterEncoding=utf8&amp;useSSL=false"
+                        userId="root" password="Duke@0417" />
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.duke.microservice.blog.domain.basic" targetProject="MAVEN"/>
+        <sqlMapGenerator targetPackage="mapper/basic" targetProject="MAVEN"/>
+        <javaClientGenerator  type="XMLMAPPER" targetPackage="com.duke.microservice.blog.mapper.basic" targetProject="MAVEN"/>
+
+        <table domainObjectName="BlogArticle" tableName="blog_article"/>
+        <!--<table domainObjectName="BlogLabel" tableName="blog_label"/>-->
+        <!--<table domainObjectName="BlogArticleLabelR" tableName="blog_article_label_r"/>-->
+        <!--<table domainObjectName="BlogType" tableName="blog_type"/>-->
+        <!--<table domainObjectName="BlogArticleTypeR" tableName="blog_article_type_r"/>-->
+    </context>
+</generatorConfiguration>
