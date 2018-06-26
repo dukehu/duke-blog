@@ -5,6 +5,9 @@ import com.duke.microservice.blog.common.Response;
 import com.duke.microservice.blog.service.BlogArticleService;
 import com.duke.microservice.blog.vm.BlogArticleSetVM;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,15 +21,10 @@ public class BlogArticleController implements BlogArticleRestService {
     @Autowired
     private BlogArticleService blogArticleService;
 
+    @ApiOperation(value = "新增博文", notes = "新增博文")
     @Override
-    public Response<String> save(
-            @RequestParam(value = "blogArticleSetVM", required = false) BlogArticleSetVM blogArticleSetVM) {
+    public Response<String> save(BlogArticleSetVM blogArticleSetVM) {
         blogArticleService.saveOrUpdate(blogArticleSetVM);
         return Response.ok();
-    }
-
-    @RequestMapping(value = "/blog_article/{name}", method = RequestMethod.GET)
-    public Response<String> test(@PathVariable(value = "name", required = false) String name) {
-        return Response.ok(blogArticleService.selectBlogById(name));
     }
 }

@@ -21,6 +21,5 @@ public interface BlogArticleRestService {
      * @return String
      */
     @RequestMapping(value = "/blog_article", method = RequestMethod.POST)
-    Response<String> save(@RequestParam(value = "blogArticleSetVM") BlogArticleSetVM blogArticleSetVM);
-
+    Response<String> save(@RequestParam(value = "blogArticleSetVM", required = false) BlogArticleSetVM blogArticleSetVM);
 }
