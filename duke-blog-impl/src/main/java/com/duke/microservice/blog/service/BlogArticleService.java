@@ -25,7 +25,7 @@ public class BlogArticleService {
      * @param blogArticleSetVM 博文设置对象
      */
     public void saveOrUpdate(BlogArticleSetVM blogArticleSetVM) {
-        // todo 统一处理异常
+        // todo 统一处理异常 https://blog.csdn.net/hao_kkkkk/article/details/80538955
         // todo 统一处理mybatis抛出的异常
         BlogArticle blogArticle = new BlogArticle();
         blogArticle.setId(UUID.randomUUID().toString());

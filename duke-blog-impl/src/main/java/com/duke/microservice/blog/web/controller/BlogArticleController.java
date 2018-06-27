@@ -1,12 +1,10 @@
-package com.duke.microservice.blog.controller;
+package com.duke.microservice.blog.web.controller;
 
 import com.duke.microservice.blog.api.BlogArticleRestService;
 import com.duke.microservice.blog.common.Response;
 import com.duke.microservice.blog.service.BlogArticleService;
 import com.duke.microservice.blog.vm.BlogArticleSetVM;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class Response<T> implements Serializable {
     private Integer status;
+    private String code;
     private String message;
     private T data;
 
@@ -16,7 +17,18 @@ public class Response<T> implements Serializable {
     private Response(T data) {
         this.status = 200;
         this.message = "成功";
+        this.code = "ok";
         this.data = data;
+    }
+
+    public Response(Integer status, String code, String message) {
+        this.status = status;
+        this.code = code;
+        this.message = message;
+    }
+
+    public static Response error(Integer status, String code, String message) {
+        return new Response(status, code, message);
     }
 
     public static <T> Response<T> ok(T data) {
