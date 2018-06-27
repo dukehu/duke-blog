@@ -28,7 +28,8 @@ management:
   context-path: /management
 logging:
   file: ./logs/blog.log
-  level: debug
+  level:
+    com.duke.microservice.blog.mapper: debug
 
 duke:
   swagger:
