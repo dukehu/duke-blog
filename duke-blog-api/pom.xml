@@ -21,6 +21,13 @@
             <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
 
+        <!-- hibernate-validator 对参数进行校验 -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>4.3.1.Final</version>
+        </dependency>
+
         <!-- swagger 依赖 -->
         <dependency>
             <groupId>io.springfox</groupId>

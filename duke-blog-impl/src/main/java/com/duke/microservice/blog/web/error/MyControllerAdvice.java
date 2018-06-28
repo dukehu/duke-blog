@@ -1,6 +1,7 @@
 package com.duke.microservice.blog.web.error;
 
 import com.duke.microservice.blog.common.Response;
+import com.duke.microservice.blog.exception.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
@@ -19,7 +20,7 @@ public class MyControllerAdvice {
     /**
      * 应用到所有的@RequestMapping注解的方法，在其执行之前初始化数据绑定
      *
-     * @param binder  参考：https://blog.csdn.net/xsf1840/article/details/73556633
+     * @param binder 参考：https://blog.csdn.net/xsf1840/article/details/73556633
      */
     @InitBinder
     public void initBinder(WebDataBinder binder) {
@@ -46,6 +47,13 @@ public class MyControllerAdvice {
     public Response errorHandler(Exception ex) {
         LOGGER.error("Exception: status[{}], code[{}], message[{}], error[{}]", "", "", ex.getMessage(), ex);
         return Response.error(10000, "", ex.getMessage());
+    }
+
+    @ResponseBody
+    @ExceptionHandler(value = BusinessException.class)
+    public Response errorBusinessExceptionHandler(BusinessException ex) {
+        LOGGER.error("Exception: status[{}], code[{}], message[{}], error{}", ex.getStatus(), ex.getCode(), ex.getMessage(), ex.getFieldErrors().toString(), ex);
+        return Response.error(ex.getFieldErrors());
     }
 
 }

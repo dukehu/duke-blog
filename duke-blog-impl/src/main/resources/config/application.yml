@@ -31,11 +31,12 @@ logging:
   file: ./logs/blog.log
   level:
     root: info
-    com.duke.microservice.blog.sqllog: debug
 
 debug: true
 
 duke:
+  sqllog:
+    enabled: false
   swagger:
     enabled: true #开启swagger,默认为开启
     title: blog api
