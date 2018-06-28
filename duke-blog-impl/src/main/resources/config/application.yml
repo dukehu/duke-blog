@@ -26,10 +26,14 @@ management:
   security:
     enabled: false
   context-path: /management
+
 logging:
   file: ./logs/blog.log
   level:
-    com.duke.microservice.blog.mapper: debug
+    root: info
+    com.duke.microservice.blog.sqllog: debug
+
+debug: true
 
 duke:
   swagger:
