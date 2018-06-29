@@ -36,7 +36,7 @@ debug: true
 
 duke:
   sqllog:
-    enabled: false
+    enabled: true
   swagger:
     enabled: true #开启swagger,默认为开启
     title: blog api

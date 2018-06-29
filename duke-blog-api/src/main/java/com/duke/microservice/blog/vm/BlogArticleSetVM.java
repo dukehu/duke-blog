@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import java.util.List;
+
 /**
  * Created duke on 2018/6/23
  */
@@ -13,22 +15,22 @@ public class BlogArticleSetVM {
 
     @ApiModelProperty(value = "博文标题", required = true)
     @NotBlank(message = "标题不能为空")
-    @Length(max = 3, min = 1, message = "博文标题长度应为1-3之间！")
+    @Length(max = 100, min = 1, message = "博文标题长度应为1-3之间！")
     private String title;
 
     @ApiModelProperty(value = "博文html原数据", required = true)
     @NotBlank(message = "博文html原数据不能为空")
-    @Length(max = 3, min = 1, message = "博文html原数据长度应为1-3之间！")
+    @Length(max = 10000, min = 1, message = "博文html原数据长度应为1-3之间！")
     private String htmlContent;
 
     @ApiModelProperty(value = "markdown原数据", required = true)
+    @NotBlank(message = "博文html原数据不能为空")
+    @Length(max = 10000, min = 1, message = "博文html原数据长度应为1-3之间！")
     private String mdContent;
 
-    @ApiModelProperty(value = "博文标签，多个之间用,（英文逗号）隔开", required = true)
-    private String label;
+    private List<BlogLabelVM> blogLabelVMS;
 
-    @ApiModelProperty(value = "博文类别，多个之间用,（英文逗号）隔开", required = true)
-    private String type;
+    private List<BlogTypeVM> blogTypeVMS;
 
     public String getTitle() {
         return title;
@@ -54,19 +56,19 @@ public class BlogArticleSetVM {
         this.mdContent = mdContent;
     }
 
-    public String getLabel() {
-        return label;
+    public List<BlogLabelVM> getBlogLabelVMS() {
+        return blogLabelVMS;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setBlogLabelVMS(List<BlogLabelVM> blogLabelVMS) {
+        this.blogLabelVMS = blogLabelVMS;
     }
 
-    public String getType() {
-        return type;
+    public List<BlogTypeVM> getBlogTypeVMS() {
+        return blogTypeVMS;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setBlogTypeVMS(List<BlogTypeVM> blogTypeVMS) {
+        this.blogTypeVMS = blogTypeVMS;
     }
 }

@@ -7,6 +7,8 @@ public class BlogArticle {
 
     private String title;
 
+    private String summary;
+
     private Integer status;
 
     private Date createTime;
@@ -14,8 +16,6 @@ public class BlogArticle {
     private Date modifyTime;
 
     private String userId;
-
-    private String content;
 
     private String htmlContent;
 
@@ -35,6 +35,14 @@ public class BlogArticle {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public Integer getStatus() {
@@ -67,14 +75,6 @@ public class BlogArticle {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
     }
 
     public String getHtmlContent() {

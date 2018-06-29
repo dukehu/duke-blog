@@ -21,6 +21,13 @@
             <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
 
+        <!-- 分页插件 -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+
         <!-- hibernate-validator 对参数进行校验 -->
         <dependency>
             <groupId>org.hibernate</groupId>

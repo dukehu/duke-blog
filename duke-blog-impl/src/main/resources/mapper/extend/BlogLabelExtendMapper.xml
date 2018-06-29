@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.duke.microservice.blog.mapper.extend.BlogLabelExtendMapper">
+    <select id="selectByUserId" resultType="com.duke.microservice.blog.domain.basic.BlogLabel">
+        select
+            id   as id,
+            name as name
+        from blog_label
+        where user_id = #{userId, jdbcType=VARCHAR};
+    </select>
+</mapper>

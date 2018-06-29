@@ -24,6 +24,7 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(String message, List<FieldError> fieldErrors) {
         this(message);
+        this.message = message;
         this.fieldErrors = fieldErrors;
     }
 

@@ -8,7 +8,7 @@ create table blog_article
 (
    id                   varchar(50) not null,
    title                varchar(500) not null,
-   content              longtext not null,
+   summary              varchar(500) not null,
    html_content         longtext not null,
    md_content           longtext not null,
    status               int(1) not null comment '0：删除
@@ -40,7 +40,7 @@ alter table blog_article_type_r comment '博文类别关系表';
 create table blog_label
 (
    id                   varchar(50) not null,
-   name                 varchar(10) not null,
+   name                 varchar(50) not null,
    create_time          datetime not null,
    modify_time          datetime not null,
    user_id              varchar(50) not null comment '此字段先预留',

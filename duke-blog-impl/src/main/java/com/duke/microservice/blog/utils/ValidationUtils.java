@@ -5,6 +5,7 @@ import com.duke.microservice.blog.exception.BusinessException;
 import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ObjectUtils;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
@@ -43,7 +44,8 @@ public class ValidationUtils {
                 Path path = constraintViolation.getPropertyPath();
                 // 属性
                 String propertyName = path.toString();
-                String value = constraintViolation.getInvalidValue().toString();
+                Object objValue = constraintViolation.getInvalidValue();
+                String value = ObjectUtils.isEmpty(objValue) ? null : objValue.toString();
                 String errMsg = constraintViolation.getMessage();
                 FieldError filedError = new FieldError(propertyName, errMsg);
                 filedErrors.add(filedError);
