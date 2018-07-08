@@ -13,8 +13,8 @@
             bt.NAME        AS typeName
         FROM
             blog_article ba
-            INNER JOIN blog_article_label_r balr ON ba.id = balr.article_id
-            INNER JOIN blog_label bl ON balr.label_id = bl.id
+            LEFT JOIN blog_article_label_r balr ON ba.id = balr.article_id
+            LEFT JOIN blog_label bl ON balr.label_id = bl.id
             LEFT JOIN blog_article_type_r batr ON ba.id = batr.article_id
             LEFT JOIN blog_type bt ON balr.label_id = bt.id
         WHERE ba.user_id = #{userId, jdbcType=VARCHAR}
