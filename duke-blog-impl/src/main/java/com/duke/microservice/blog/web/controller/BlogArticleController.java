@@ -4,6 +4,7 @@ import com.duke.microservice.blog.BlogConstants;
 import com.duke.microservice.blog.api.BlogArticleRestService;
 import com.duke.microservice.blog.common.Response;
 import com.duke.microservice.blog.service.BlogArticleService;
+import com.duke.microservice.blog.vm.BlogArticleDetailVM;
 import com.duke.microservice.blog.vm.BlogArticleSetVM;
 import com.github.pagehelper.PageInfo;
 import io.swagger.annotations.Api;
@@ -54,13 +55,17 @@ public class BlogArticleController implements BlogArticleRestService {
     })
     @ApiOperation(value = "详情", notes = "详情")
     @Override
-    public Response<BlogArticleSetVM> select(@PathVariable(value = "id", required = false) String id) {
-        return null;
+    public Response<BlogArticleDetailVM> select(@PathVariable(value = "id", required = false) String id) {
+        return Response.ok(blogArticleService.selectById(id));
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "起始页码", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "每页条数", dataType = "int", paramType = "query")
+    })
     @ApiOperation(value = "列表", notes = "列表")
     @Override
-    public Response<PageInfo<BlogArticleSetVM>> select() {
-        return null;
+    public Response<PageInfo<BlogArticleDetailVM>> select(Integer page, Integer size) {
+        return Response.ok(blogArticleService.select(page, size));
     }
 }

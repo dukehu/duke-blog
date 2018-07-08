@@ -43,4 +43,15 @@ public class BlogLabelService {
         }
         return blogLabelVMS;
     }
+
+    /**
+     * 批量保存
+     *
+     * @param labels 标签集合对象
+     */
+    void batchSave(List<BlogLabel> labels) {
+        if (!CollectionUtils.isEmpty(labels)) {
+            blogLabelExtendMapper.batchSave(labels);
+        }
+    }
 }

@@ -8,4 +8,17 @@
         from blog_label
         where user_id = #{userId, jdbcType=VARCHAR};
     </select>
+
+    <insert id="batchSave">
+        <if test="labels != null and labels.size() > 0">
+            insert into blog_label(id, `name`, create_time, modify_time, user_id)
+            <foreach collection="labels" item="label" separator="," open="values">
+                (#{label.id, jdbcType=VARCHAR},
+                #{label.name, jdbcType=VARCHAR},
+                #{label.createTime, jdbcType=VARCHAR},
+                #{label.modifyTime, jdbcType=VARCHAR},
+                #{label.userId, jdbcType=VARCHAR})
+            </foreach>
+        </if>
+    </insert>
 </mapper>

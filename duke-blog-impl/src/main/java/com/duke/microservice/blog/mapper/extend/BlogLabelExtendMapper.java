@@ -19,4 +19,11 @@ public interface BlogLabelExtendMapper {
      * @return List<BlogLabel>
      */
     List<BlogLabel> selectByUserId(@Param("userId") String userId);
+
+    /**
+     * 批量保存
+     *
+     * @param labels 标签集合对象
+     */
+    void batchSave(@Param("labels") List<BlogLabel> labels);
 }

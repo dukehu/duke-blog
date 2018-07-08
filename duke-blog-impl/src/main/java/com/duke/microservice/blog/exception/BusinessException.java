@@ -18,6 +18,11 @@ public class BusinessException extends RuntimeException {
 
     private List<FieldError> fieldErrors = new ArrayList<>();
 
+    public BusinessException(FieldError fieldError) {
+        this("数据校验失败");
+        this.fieldErrors.add(fieldError);
+    }
+
     public BusinessException(String message) {
         super(message);
     }

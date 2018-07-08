@@ -19,6 +19,14 @@ public class BlogLabelVM {
     @Length(max = 10, min = 1, message = "长度应为1-10！")
     private String name;
 
+    public BlogLabelVM() {
+    }
+
+    public BlogLabelVM(String id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public String getId() {
         return id;
     }

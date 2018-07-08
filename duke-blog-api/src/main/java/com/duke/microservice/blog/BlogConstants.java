@@ -10,7 +10,7 @@ public class BlogConstants {
     /**
      * 博客状态枚举类
      */
-    public static enum BLOG_STATUS {
+    public enum BLOG_STATUS {
         /**
          * 0：删除 1：发布 2：存草稿
          */

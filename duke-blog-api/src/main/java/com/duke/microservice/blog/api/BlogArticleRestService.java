@@ -2,6 +2,7 @@ package com.duke.microservice.blog.api;
 
 import com.duke.microservice.blog.BlogConstants;
 import com.duke.microservice.blog.common.Response;
+import com.duke.microservice.blog.vm.BlogArticleDetailVM;
 import com.duke.microservice.blog.vm.BlogArticleSetVM;
 import com.github.pagehelper.PageInfo;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 /**
  * Created duke on 2018/6/23
@@ -54,13 +53,16 @@ public interface BlogArticleRestService {
      * @return BlogArticleSetVM
      */
     @RequestMapping(value = "/blog_article/{id}", method = RequestMethod.GET)
-    Response<BlogArticleSetVM> select(@PathVariable(value = "id", required = false) String id);
+    Response<BlogArticleDetailVM> select(@PathVariable(value = "id", required = false) String id);
 
     /**
      * 博文详情
      *
+     * @param page 起始页
+     * @param size 每页条数
      * @return BlogArticleSetVM
      */
     @RequestMapping(value = "/blog_article", method = RequestMethod.GET)
-    Response<PageInfo<BlogArticleSetVM>> select();
+    Response<PageInfo<BlogArticleDetailVM>> select(@RequestParam(value = "page", required = false) Integer page,
+                                                   @RequestParam(value = "size", required = false) Integer size);
 }

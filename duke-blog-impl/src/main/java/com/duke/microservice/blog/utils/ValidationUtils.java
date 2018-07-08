@@ -6,6 +6,7 @@ import org.hibernate.validator.HibernateValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Path;
@@ -27,6 +28,12 @@ public class ValidationUtils {
      */
     private static Validator validator = Validation
             .byProvider(HibernateValidator.class).configure().failFast(true).buildValidatorFactory().getValidator();
+
+    public static final void notEmpty(Object target, String fieldName, String message) {
+        if (ObjectUtils.isEmpty(target)) {
+            throw new BusinessException(new FieldError(StringUtils.isEmpty(fieldName) ? "" : fieldName, message == null ? "" : message));
+        }
+    }
 
     /**
      * 校验对象
