@@ -11,6 +11,10 @@
         <relativePath/>
     </parent>
 
+    <properties>
+        <start-class>com.duke.microservice.blog.BlogApplication</start-class>
+    </properties>
+
     <artifactId>duke-blog-impl</artifactId>
     <groupId>com.duke.microservice</groupId>
     <packaging>war</packaging>
@@ -117,9 +121,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <classifier>exec</classifier>
-                </configuration>
             </plugin>
         </plugins>
     </build>

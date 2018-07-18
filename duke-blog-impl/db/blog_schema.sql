@@ -11,6 +11,7 @@ create table blog_article
    summary              varchar(500) not null,
    html_content         longtext not null,
    md_content           longtext not null,
+   article_views        int(10) not null,
    status               int(1) not null comment '0：删除
             1：发布
             2：存草稿',

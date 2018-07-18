@@ -5,9 +5,9 @@ server:
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://47.97.122.119:3306/duke_blog?useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://127.0.0.1:3306/duke_blog?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
-    password: Duke@0417
+    password: duke
     hikari:
       data-source-properties:
           cachePrepStmts: true

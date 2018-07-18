@@ -72,6 +72,7 @@ public class BlogArticleService {
         blogArticle.setCreateTime(date);
         blogArticle.setModifyTime(date);
         blogArticle.setUserId(userId);
+        blogArticle.setArticleViews(1);
 
         if (!CollectionUtils.isEmpty(blogLabelVMS)) {
             this.setLabels(blogLabelVMS, blogArticle.getId(), userId, date);
@@ -166,7 +167,7 @@ public class BlogArticleService {
         String userId = "duke";
 
         if (ObjectUtils.isEmpty(page) || ObjectUtils.isEmpty(size)) {
-            page = 0;
+            page = 1;
             size = 10;
         }
         PageHelper.offsetPage(page, size);

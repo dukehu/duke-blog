@@ -17,6 +17,8 @@ public class BlogArticle {
 
     private String userId;
 
+    private Integer articleViews;
+
     private String htmlContent;
 
     private String mdContent;
@@ -75,6 +77,14 @@ public class BlogArticle {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Integer getArticleViews() {
+        return articleViews;
+    }
+
+    public void setArticleViews(Integer articleViews) {
+        this.articleViews = articleViews;
     }
 
     public String getHtmlContent() {
