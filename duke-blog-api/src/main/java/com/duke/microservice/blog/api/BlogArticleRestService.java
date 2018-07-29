@@ -1,7 +1,7 @@
 package com.duke.microservice.blog.api;
 
+import com.duke.framework.web.Response;
 import com.duke.microservice.blog.BlogConstants;
-import com.duke.microservice.blog.common.Response;
 import com.duke.microservice.blog.vm.BlogArticleDetailVM;
 import com.duke.microservice.blog.vm.BlogArticleSetVM;
 import com.github.pagehelper.PageInfo;
@@ -62,7 +62,7 @@ public interface BlogArticleRestService {
      * @param size 每页条数
      * @return BlogArticleSetVM
      */
-    @RequestMapping(value = "/blog_article", method = RequestMethod.GET)
+    @RequestMapping(value = "/nologin/blog_article", method = RequestMethod.GET)
     Response<PageInfo<BlogArticleDetailVM>> select(@RequestParam(value = "page", required = false) Integer page,
                                                    @RequestParam(value = "size", required = false) Integer size);
 }

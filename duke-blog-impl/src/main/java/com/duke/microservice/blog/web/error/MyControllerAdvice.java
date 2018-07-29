@@ -1,7 +1,7 @@
 package com.duke.microservice.blog.web.error;
 
-import com.duke.microservice.blog.common.Response;
-import com.duke.microservice.blog.exception.BusinessException;
+import com.duke.framework.exception.BusinessException;
+import com.duke.framework.web.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;

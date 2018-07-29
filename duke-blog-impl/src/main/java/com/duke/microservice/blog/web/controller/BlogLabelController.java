@@ -1,7 +1,7 @@
 package com.duke.microservice.blog.web.controller;
 
+import com.duke.framework.web.Response;
 import com.duke.microservice.blog.api.BlogLabelRestService;
-import com.duke.microservice.blog.common.Response;
 import com.duke.microservice.blog.service.BlogLabelService;
 import com.duke.microservice.blog.vm.BlogLabelVM;
 import io.swagger.annotations.Api;

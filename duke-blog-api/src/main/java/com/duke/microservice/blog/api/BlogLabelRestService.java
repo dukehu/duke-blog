@@ -1,7 +1,7 @@
 package com.duke.microservice.blog.api;
 
+import com.duke.framework.web.Response;
 import com.duke.microservice.blog.BlogConstants;
-import com.duke.microservice.blog.common.Response;
 import com.duke.microservice.blog.vm.BlogLabelVM;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;

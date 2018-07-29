@@ -38,6 +38,11 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+
         <!-- 自定义swagger starter 依赖 -->
         <dependency>
             <groupId>com.duke.framework</groupId>
@@ -49,6 +54,12 @@
         <dependency>
             <groupId>com.duke.framework</groupId>
             <artifactId>sqllog-spring-boot-starter</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.duke.framework</groupId>
+            <artifactId>duke-framework-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

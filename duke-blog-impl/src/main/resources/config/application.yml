@@ -21,6 +21,10 @@ security:
     password: duke
   basic:
     enabled: false
+  oauth2:
+    resource:
+      service-id: duke-auth
+      user-info-uri: http://localhost:5285/user
 
 management:
   security:
@@ -37,6 +41,8 @@ debug: true
 duke:
   sqllog:
     enabled: true
+  redisson:
+    enabled: false
   swagger:
     enabled: true #开启swagger,默认为开启
     title: blog api

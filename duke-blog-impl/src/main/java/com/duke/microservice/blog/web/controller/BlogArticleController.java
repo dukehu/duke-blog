@@ -1,8 +1,8 @@
 package com.duke.microservice.blog.web.controller;
 
+import com.duke.framework.web.Response;
 import com.duke.microservice.blog.BlogConstants;
 import com.duke.microservice.blog.api.BlogArticleRestService;
-import com.duke.microservice.blog.common.Response;
 import com.duke.microservice.blog.service.BlogArticleService;
 import com.duke.microservice.blog.vm.BlogArticleDetailVM;
 import com.duke.microservice.blog.vm.BlogArticleSetVM;
@@ -12,6 +12,9 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -67,5 +70,12 @@ public class BlogArticleController implements BlogArticleRestService {
     @Override
     public Response<PageInfo<BlogArticleDetailVM>> select(Integer page, Integer size) {
         return Response.ok(blogArticleService.select(page, size));
+    }
+
+    @RequestMapping(value = "/blog_article/test", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('role_admin1')")
+    public Response<String> test() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return Response.ok("123456789");
     }
 }
