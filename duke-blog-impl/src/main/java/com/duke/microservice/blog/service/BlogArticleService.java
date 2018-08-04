@@ -1,6 +1,7 @@
 package com.duke.microservice.blog.service;
 
 import com.duke.framework.exception.BusinessException;
+import com.duke.framework.utils.SecurityUtils;
 import com.duke.framework.utils.ValidationUtils;
 import com.duke.microservice.blog.BlogConstants;
 import com.duke.microservice.blog.domain.basic.BlogArticle;
@@ -67,6 +68,7 @@ public class BlogArticleService {
         blogArticle.setId(UUID.randomUUID().toString());
         // 处理摘要
         String stripHtml = stripHtml(blogArticleSetVM.getHtmlContent());
+        blogArticle.setNavigation(blogArticleSetVM.getNavigation());
         blogArticle.setSummary(stripHtml.substring(0, stripHtml.length() > 50 ? 50 : stripHtml.length()));
         blogArticle.setStatus(BlogConstants.BLOG_STATUS.PULISHED.getCode());
         blogArticle.setCreateTime(date);
@@ -135,8 +137,8 @@ public class BlogArticleService {
         // 校验主键有效性
         BlogArticle blogArticle = this.exit(id);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        return new BlogArticleDetailVM(blogArticle.getId(), blogArticle.getTitle()
-                , simpleDateFormat.format(blogArticle.getCreateTime()), blogArticle.getMdContent(), blogArticle.getHtmlContent());
+        return new BlogArticleDetailVM(blogArticle.getId(), blogArticle.getTitle(), blogArticle.getNavigation(),
+                simpleDateFormat.format(blogArticle.getCreateTime()), blogArticle.getMdContent(), blogArticle.getHtmlContent());
     }
 
     /**
@@ -165,6 +167,8 @@ public class BlogArticleService {
     public PageInfo<BlogArticleDetailVM> select(Integer page, Integer size) {
         // todo 获取用户信息
         String userId = "duke";
+
+        SecurityUtils.getCurrentUserInfo();
 
         if (ObjectUtils.isEmpty(page) || ObjectUtils.isEmpty(size)) {
             page = 1;

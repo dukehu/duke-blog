@@ -19,6 +19,8 @@ public class BlogArticle {
 
     private Integer articleViews;
 
+    private String navigation;
+
     private String htmlContent;
 
     private String mdContent;
@@ -85,6 +87,14 @@ public class BlogArticle {
 
     public void setArticleViews(Integer articleViews) {
         this.articleViews = articleViews;
+    }
+
+    public String getNavigation() {
+        return navigation;
+    }
+
+    public void setNavigation(String navigation) {
+        this.navigation = navigation;
     }
 
     public String getHtmlContent() {

@@ -26,6 +26,11 @@ public interface BlogArticleRestService {
     @RequestMapping(value = "/blog_article/publish", method = RequestMethod.POST)
     Response<String> publish(@RequestParam(value = "blogArticleSetVM", required = false) BlogArticleSetVM blogArticleSetVM);
 
+    @RequestMapping(value = "/blog_article/update/{id}", method = RequestMethod.PUT)
+    Response<String> update(
+            @PathVariable(value = "id", required = false) String id,
+            @RequestParam(value = "blogArticleSetVM", required = false) BlogArticleSetVM blogArticleSetVM);
+
     /**
      * 存草稿
      *
@@ -52,7 +57,7 @@ public interface BlogArticleRestService {
      * @param id 主键
      * @return BlogArticleSetVM
      */
-    @RequestMapping(value = "/blog_article/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/nologin/blog_article/{id}", method = RequestMethod.GET)
     Response<BlogArticleDetailVM> select(@PathVariable(value = "id", required = false) String id);
 
     /**

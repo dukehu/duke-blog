@@ -18,6 +18,11 @@ public class BlogArticleDetailVM {
     private String title;
 
     /**
+     * 导航目录
+     */
+    private String navigation;
+
+    /**
      * 摘要
      */
     private String summary;
@@ -59,9 +64,10 @@ public class BlogArticleDetailVM {
         this.typeVMS = typeVMS;
     }
 
-    public BlogArticleDetailVM(String id, String title, String publishDate, String mdContent, String htmlContent) {
+    public BlogArticleDetailVM(String id, String title, String navigation, String publishDate, String mdContent, String htmlContent) {
         this.id = id;
         this.title = title;
+        this.navigation = navigation;
         this.publishDate = publishDate;
         this.mdContent = mdContent;
         this.htmlContent = htmlContent;
@@ -81,6 +87,14 @@ public class BlogArticleDetailVM {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getNavigation() {
+        return navigation;
+    }
+
+    public void setNavigation(String navigation) {
+        this.navigation = navigation;
     }
 
     public String getSummary() {

@@ -35,6 +35,16 @@ public class BlogArticleController implements BlogArticleRestService {
     }
 
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "主键", dataType = "string", paramType = "path", required = true)
+    })
+    @ApiOperation(value = "修改", notes = "修改")
+    @Override
+    public Response<String> update(@PathVariable(value = "id", required = false) String id,
+                                   BlogArticleSetVM blogArticleSetVM) {
+        return null;
+    }
+
+    @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "主键", dataType = "string", paramType = "path")
     })
     @ApiOperation(value = "存草稿", notes = "存草稿")
@@ -69,11 +79,12 @@ public class BlogArticleController implements BlogArticleRestService {
     @ApiOperation(value = "列表", notes = "列表")
     @Override
     public Response<PageInfo<BlogArticleDetailVM>> select(Integer page, Integer size) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return Response.ok(blogArticleService.select(page, size));
     }
 
     @RequestMapping(value = "/blog_article/test", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('role_admin1')")
+    @PreAuthorize("hasAuthority('role_admin')")
     public Response<String> test() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return Response.ok("123456789");

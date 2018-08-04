@@ -10,6 +10,7 @@
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="article_views" property="articleViews" jdbcType="INTEGER" />
+    <result column="navigation" property="navigation" jdbcType="LONGVARCHAR" />
     <result column="html_content" property="htmlContent" jdbcType="LONGVARCHAR" />
     <result column="md_content" property="mdContent" jdbcType="LONGVARCHAR" />
   </resultMap>
@@ -20,12 +21,12 @@
   <insert id="insert" parameterType="com.duke.microservice.blog.domain.basic.BlogArticle" >
     insert into blog_article (id, title, summary, 
       status, create_time, modify_time, 
-      user_id, article_views, html_content, 
-      md_content)
+      user_id, article_views, navigation, 
+      html_content, md_content)
     values (#{id,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{summary,jdbcType=VARCHAR}, 
       #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifyTime,jdbcType=TIMESTAMP}, 
-      #{userId,jdbcType=VARCHAR}, #{articleViews,jdbcType=INTEGER}, #{htmlContent,jdbcType=LONGVARCHAR}, 
-      #{mdContent,jdbcType=LONGVARCHAR})
+      #{userId,jdbcType=VARCHAR}, #{articleViews,jdbcType=INTEGER}, #{navigation,jdbcType=LONGVARCHAR}, 
+      #{htmlContent,jdbcType=LONGVARCHAR}, #{mdContent,jdbcType=LONGVARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.duke.microservice.blog.domain.basic.BlogArticle" >
     update blog_article
@@ -36,19 +37,20 @@
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
       user_id = #{userId,jdbcType=VARCHAR},
       article_views = #{articleViews,jdbcType=INTEGER},
+      navigation = #{navigation,jdbcType=LONGVARCHAR},
       html_content = #{htmlContent,jdbcType=LONGVARCHAR},
       md_content = #{mdContent,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select id, title, summary, status, create_time, modify_time, user_id, article_views, 
-    html_content, md_content
+    navigation, html_content, md_content
     from blog_article
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
     select id, title, summary, status, create_time, modify_time, user_id, article_views, 
-    html_content, md_content
+    navigation, html_content, md_content
     from blog_article
   </select>
 </mapper>

@@ -18,6 +18,11 @@ public class BlogArticleSetVM {
     @Length(max = 100, min = 1, message = "博文标题长度应为1-3之间！")
     private String title;
 
+    @ApiModelProperty(value = "导航目录", required = true)
+    @NotBlank(message = "导航目录不能为空！")
+    @Length(max = 10000, min = 1, message = "博文html原数据长度应为1-3之间！")
+    private String navigation;
+
     @ApiModelProperty(value = "博文html原数据", required = true)
     @NotBlank(message = "博文html原数据不能为空")
     @Length(max = 10000, min = 1, message = "博文html原数据长度应为1-3之间！")
@@ -38,6 +43,14 @@ public class BlogArticleSetVM {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getNavigation() {
+        return navigation;
+    }
+
+    public void setNavigation(String navigation) {
+        this.navigation = navigation;
     }
 
     public String getHtmlContent() {

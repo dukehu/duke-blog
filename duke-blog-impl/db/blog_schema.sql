@@ -8,6 +8,7 @@ create table blog_article
 (
    id                   varchar(50) not null,
    title                varchar(500) not null,
+   navigation           longtext not null,
    summary              varchar(500) not null,
    html_content         longtext not null,
    md_content           longtext not null,
