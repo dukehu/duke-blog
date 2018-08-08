@@ -1,10 +1,15 @@
 package com.duke.microservice.blog.vm;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 /**
  * Created duke on 2018/7/7
  */
+@Setter
+@Getter
 public class BlogArticleDetailVM {
 
     /**
@@ -52,9 +57,6 @@ public class BlogArticleDetailVM {
      */
     private List<BlogTypeVM> typeVMS;
 
-    public BlogArticleDetailVM() {
-    }
-
     public BlogArticleDetailVM(String id, String title, String summary, String publishDate, List<BlogLabelVM> labelVMS, List<BlogTypeVM> typeVMS) {
         this.id = id;
         this.title = title;
@@ -71,77 +73,5 @@ public class BlogArticleDetailVM {
         this.publishDate = publishDate;
         this.mdContent = mdContent;
         this.htmlContent = htmlContent;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getNavigation() {
-        return navigation;
-    }
-
-    public void setNavigation(String navigation) {
-        this.navigation = navigation;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public String getPublishDate() {
-        return publishDate;
-    }
-
-    public void setPublishDate(String publishDate) {
-        this.publishDate = publishDate;
-    }
-
-    public String getMdContent() {
-        return mdContent;
-    }
-
-    public void setMdContent(String mdContent) {
-        this.mdContent = mdContent;
-    }
-
-    public String getHtmlContent() {
-        return htmlContent;
-    }
-
-    public void setHtmlContent(String htmlContent) {
-        this.htmlContent = htmlContent;
-    }
-
-    public List<BlogLabelVM> getLabelVMS() {
-        return labelVMS;
-    }
-
-    public void setLabelVMS(List<BlogLabelVM> labelVMS) {
-        this.labelVMS = labelVMS;
-    }
-
-    public List<BlogTypeVM> getTypeVMS() {
-        return typeVMS;
-    }
-
-    public void setTypeVMS(List<BlogTypeVM> typeVMS) {
-        this.typeVMS = typeVMS;
     }
 }

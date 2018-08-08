@@ -1,12 +1,22 @@
 package com.duke.microservice.blog.vm;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * Created duke on 2018/6/29
  */
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel("博文类型VM")
 public class BlogTypeVM {
 
     @ApiModelProperty(value = "主键")
@@ -16,29 +26,5 @@ public class BlogTypeVM {
     @NotBlank(message = "类别名称不能为空")
     @Length(max = 10, min = 1, message = "长度应为1-10！")
     private String name;
-
-    public BlogTypeVM() {
-    }
-
-    public BlogTypeVM(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
 }

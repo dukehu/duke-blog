@@ -2,6 +2,7 @@ package com.duke.microservice.blog.service;
 
 import com.duke.microservice.blog.domain.basic.BlogArticleLabelR;
 import com.duke.microservice.blog.mapper.extend.BlogArticleLabelRExtendMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 @Service
 @Transactional
+@Slf4j
 public class BlogArticleLabelRService {
 
     @Autowired

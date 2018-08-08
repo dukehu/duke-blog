@@ -7,6 +7,7 @@ import com.duke.microservice.blog.vm.BlogLabelVM;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class BlogLabelController implements BlogLabelRestService {
     private BlogLabelService blogLabelService;
 
     @ApiOperation(value = "列表", notes = "列表")
+    @PreAuthorize("hasAuthority('admin') or hasAuthority('blog_blog_label_select')")
     @Override
     public Response<List<BlogLabelVM>> select() {
         return Response.ok(blogLabelService.select());

@@ -1,5 +1,7 @@
 package com.duke.microservice.blog.web.controller;
 
+import com.duke.framework.security.AuthUserDetails;
+import com.duke.framework.utils.SecurityUtils;
 import com.duke.framework.web.Response;
 import com.duke.microservice.blog.BlogConstants;
 import com.duke.microservice.blog.api.BlogArticleRestService;
@@ -13,9 +15,14 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 /**
  * Created duke on 2018/6/23
@@ -28,6 +35,7 @@ public class BlogArticleController implements BlogArticleRestService {
     private BlogArticleService blogArticleService;
 
     @ApiOperation(value = "发表", notes = "发表")
+    @PreAuthorize("hasAuthority('admin') or hasAuthority('blog_blog_article_publish')")
     @Override
     public Response<String> publish(BlogArticleSetVM blogArticleSetVM) {
         blogArticleService.setBlogArticle(blogArticleSetVM, BlogConstants.BLOG_STATUS.PULISHED.getCode(), null);
@@ -39,6 +47,7 @@ public class BlogArticleController implements BlogArticleRestService {
     })
     @ApiOperation(value = "修改", notes = "修改")
     @Override
+    @PreAuthorize("hasAuthority('admin') or hasAuthority('blog_blog_article_update')")
     public Response<String> update(@PathVariable(value = "id", required = false) String id,
                                    BlogArticleSetVM blogArticleSetVM) {
         return null;
@@ -48,6 +57,7 @@ public class BlogArticleController implements BlogArticleRestService {
             @ApiImplicitParam(name = "id", value = "主键", dataType = "string", paramType = "path")
     })
     @ApiOperation(value = "存草稿", notes = "存草稿")
+    @PreAuthorize("hasAuthority('admin') or hasAuthority('blog_blog_article_draft')")
     @Override
     public Response<String> draft(@PathVariable(value = "id", required = false) String id,
                                   BlogArticleSetVM blogArticleSetVM) {
@@ -57,7 +67,8 @@ public class BlogArticleController implements BlogArticleRestService {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "主键", dataType = "string", paramType = "path", required = true)
     })
-    @ApiOperation(value = "存草稿", notes = "存草稿")
+    @ApiOperation(value = "删除", notes = "删除")
+    @PreAuthorize("hasAuthority('admin') or hasAuthority('blog_blog_article_delete')")
     @Override
     public Response<String> delete(@PathVariable(value = "id", required = false) String id) {
         return null;
@@ -67,6 +78,7 @@ public class BlogArticleController implements BlogArticleRestService {
             @ApiImplicitParam(name = "id", value = "主键", dataType = "string", paramType = "path", required = true)
     })
     @ApiOperation(value = "详情", notes = "详情")
+    @PreAuthorize("hasAuthority('admin')")
     @Override
     public Response<BlogArticleDetailVM> select(@PathVariable(value = "id", required = false) String id) {
         return Response.ok(blogArticleService.selectById(id));
@@ -84,9 +96,10 @@ public class BlogArticleController implements BlogArticleRestService {
     }
 
     @RequestMapping(value = "/blog_article/test", method = RequestMethod.GET)
-    @PreAuthorize("hasAuthority('role_admin')")
-    public Response<String> test() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return Response.ok("123456789");
+    @PreAuthorize("hasAuthority('admin')")
+    public Response<AuthUserDetails> test() {
+        AuthUserDetails authUserDetails = SecurityUtils.getCurrentUserInfo();
+
+        return Response.ok(authUserDetails);
     }
 }
