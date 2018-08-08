@@ -12,7 +12,7 @@
 
     <groupId>com.duke.microservice</groupId>
     <artifactId>duke-blog</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>${com.duke.version}</version>
     <packaging>pom</packaging>
 
     <modules>

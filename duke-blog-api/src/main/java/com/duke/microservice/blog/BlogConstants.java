@@ -1,5 +1,8 @@
 package com.duke.microservice.blog;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * Created duke on 2018/6/23
  */
@@ -10,6 +13,7 @@ public class BlogConstants {
     /**
      * 博客状态枚举类
      */
+    @AllArgsConstructor
     public enum BLOG_STATUS {
         /**
          * 0：删除 1：发布 2：存草稿
@@ -18,20 +22,9 @@ public class BlogConstants {
         PULISHED(1, "发布"),
         DRAFTED(2, "存草稿");
 
+        @Getter
         private Integer code;
+        @Getter
         private String desc;
-
-        BLOG_STATUS(Integer code, String desc) {
-            this.code = code;
-            this.desc = desc;
-        }
-
-        public Integer getCode() {
-            return code;
-        }
-
-        public String getDesc() {
-            return desc;
-        }
     }
 }

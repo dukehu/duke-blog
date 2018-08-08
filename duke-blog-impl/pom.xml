@@ -24,30 +24,7 @@
         <dependency>
             <groupId>com.duke.microservice</groupId>
             <artifactId>duke-blog-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <!--eureka client依赖-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.security.oauth</groupId>
-            <artifactId>spring-security-oauth2</artifactId>
-        </dependency>
-
-        <!-- 使用lombok，让代码更简洁 -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.10</version>
+            <version>${com.duke.version}</version>
         </dependency>
 
         <!-- 自定义swagger starter 依赖 -->
@@ -70,51 +47,77 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <!-- mysql-->
+        <!--eureka client依赖-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
+
+        <!-- spring security begin -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <!-- spring security end -->
+
+        <!-- spring security oauth2 begin -->
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+        <!-- spring security oauth2 end -->
+
+        <!-- mysql begin -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+        <!-- mysql end -->
 
-        <!-- 数据源 -->
+        <!-- 数据源 begin -->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>2.5.1</version>
         </dependency>
-        <!-- 分页 -->
+        <!-- 数据源 end -->
+
+        <!-- 分页 begin -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper</artifactId>
-            <version>5.0.1</version>
         </dependency>
+        <!-- 分页 end -->
 
-        <!-- mybatis -->
+        <!-- mybatis begin -->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis</artifactId>
-            <version>3.4.4</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
-            <version>1.3.1</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-autoconfigure</artifactId>
-            <version>1.3.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.3.0</version>
         </dependency>
+        <!-- mybatis end -->
+
+        <!-- 使用lombok，让代码更简洁 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.10</version>
+        </dependency>
+        <!-- lombok end -->
     </dependencies>
 
     <build>
