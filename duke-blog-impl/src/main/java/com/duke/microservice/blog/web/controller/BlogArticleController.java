@@ -15,14 +15,12 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created duke on 2018/6/23
@@ -98,8 +96,8 @@ public class BlogArticleController implements BlogArticleRestService {
     @RequestMapping(value = "/blog_article/test", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('admin')")
     public Response<AuthUserDetails> test() {
-        AuthUserDetails authUserDetails = SecurityUtils.getCurrentUserInfo();
+        AuthUserDetails userDetails = SecurityUtils.getCurrentUserInfo();
 
-        return Response.ok(authUserDetails);
+        return Response.ok(userDetails);
     }
 }

@@ -1,6 +1,8 @@
 package com.duke.microservice.blog.service;
 
 import com.duke.framework.exception.BusinessException;
+import com.duke.framework.security.AuthUserDetails;
+import com.duke.framework.utils.SecurityUtils;
 import com.duke.framework.utils.ValidationUtils;
 import com.duke.microservice.blog.BlogConstants;
 import com.duke.microservice.blog.domain.basic.BlogArticle;
@@ -53,9 +55,9 @@ public class BlogArticleService {
         // 统一处理异常 https://blog.csdn.net/hao_kkkkk/article/details/80538955
         // todo 这个ValidationUtils.validate好像是不能对对象里面的对象进行校验的，抽时间看一下
         ValidationUtils.validate(blogArticleSetVM, "blogArticleSetVM", "参数校验失败！");
-
-        // todo 获取用户信息
-        String userId = "duke";
+        // 获取用户信息
+        AuthUserDetails authUserDetails = SecurityUtils.getCurrentUserInfo();
+        String userId = authUserDetails.getUserId();
         // 类别
         List<BlogTypeVM> blogTypeVMS = blogArticleSetVM.getBlogTypeVMS();
         // 标签
