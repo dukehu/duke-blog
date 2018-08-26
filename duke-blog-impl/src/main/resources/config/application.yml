@@ -3,11 +3,10 @@ server:
   context-path: /
 
 spring:
+  profiles:
+    active: @profileActive@
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://127.0.0.1:3306/duke_blog?useUnicode=true&characterEncoding=utf8&useSSL=false
-    username: root
-    password: duke
     hikari:
       data-source-properties:
           cachePrepStmts: true
