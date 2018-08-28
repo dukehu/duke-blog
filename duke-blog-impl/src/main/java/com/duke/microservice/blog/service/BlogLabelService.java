@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created duke on 2018/6/29
@@ -53,5 +55,33 @@ public class BlogLabelService {
         if (!CollectionUtils.isEmpty(labels)) {
             blogLabelExtendMapper.batchSave(labels);
         }
+    }
+
+    /**
+     * 根据博文id集合查找
+     *
+     * @param articleIds 博文id集合
+     * @return map
+     */
+    @Transactional(readOnly = true)
+    public Map<String, List<BlogLabelVM>> selectByArticleIds(List<String> articleIds) {
+        Map<String, List<BlogLabelVM>> map = new HashMap<>();
+        if (!CollectionUtils.isEmpty(articleIds)) {
+            List<Map<String, String>> blogLabels = blogLabelExtendMapper.selectByArticleIds(articleIds);
+            blogLabels.forEach(tmp -> {
+                String articleId = tmp.get("articleId");
+                String id = tmp.get("id");
+                String labelName = tmp.get("labelName");
+                BlogLabelVM blogLabelVM = new BlogLabelVM(id, labelName);
+                if (map.containsKey(articleId)) {
+                    map.get(articleId).add(blogLabelVM);
+                } else {
+                    List<BlogLabelVM> blogLabelVMS = new ArrayList<>();
+                    blogLabelVMS.add(blogLabelVM);
+                    map.put(articleId, blogLabelVMS);
+                }
+            });
+        }
+        return map;
     }
 }

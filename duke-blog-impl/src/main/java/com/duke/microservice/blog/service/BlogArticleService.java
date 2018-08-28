@@ -15,6 +15,7 @@ import com.duke.microservice.blog.vm.BlogArticleDetailVM;
 import com.duke.microservice.blog.vm.BlogArticleSetVM;
 import com.duke.microservice.blog.vm.BlogLabelVM;
 import com.duke.microservice.blog.vm.BlogTypeVM;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +27,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created duke on 2018/6/23
@@ -41,6 +43,9 @@ public class BlogArticleService {
 
     @Autowired
     private BlogLabelService blogLabelService;
+
+    @Autowired
+    private BlogTypeService blogTypeService;
 
     @Autowired
     private BlogArticleLabelRService blogArticleLabelRService;
@@ -133,10 +138,13 @@ public class BlogArticleService {
      * @param id 主键
      * @return BlogArticleDetailVM
      */
-    @Transactional(readOnly = true)
     public BlogArticleDetailVM selectById(String id) {
         // 校验主键有效性
         BlogArticle blogArticle = this.exit(id);
+
+        // 访问次数加一
+        blogArticleExtendMapper.updateArticleViewsById(id, blogArticle.getArticleViews() + 1);
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         return new BlogArticleDetailVM(blogArticle.getId(), blogArticle.getTitle(), blogArticle.getNavigation(),
                 simpleDateFormat.format(blogArticle.getCreateTime()), blogArticle.getMdContent(), blogArticle.getHtmlContent());
@@ -170,36 +178,46 @@ public class BlogArticleService {
         String userId = "duke";
 
         if (ObjectUtils.isEmpty(page) || ObjectUtils.isEmpty(size)) {
-            page = 1;
+            page = 0;
             size = 10;
         }
-        PageHelper.offsetPage(page, size);
+        PageHelper.startPage(page, size);
         List<BlogArticleList> blogArticleLists = blogArticleExtendMapper.selectByUserId(userId);
-        List<BlogArticleDetailVM> blogArticleDetailVMS = new ArrayList<>();
-        Map<String, BlogArticleDetailVM> map = new HashMap<>();
+        List<String> articleIds = blogArticleLists.stream().map(BlogArticleList::getId).collect(Collectors.toList());
+        Map<String, List<BlogLabelVM>> blogLabelMap = blogLabelService.selectByArticleIds(articleIds);
+        Map<String, List<BlogTypeVM>> blogTypeMap = blogTypeService.selectByArticleIds(articleIds);
+
+        List<BlogArticleDetailVM> blogArticleDetailVMS = new Page<>();
         if (!CollectionUtils.isEmpty(blogArticleLists)) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             for (BlogArticleList articleList : blogArticleLists) {
                 String articleId = articleList.getId();
-                BlogLabelVM labelVM = new BlogLabelVM(articleList.getLabelId(), articleList.getLabelName());
-                BlogTypeVM typeVM = new BlogTypeVM(articleList.getTypeId(), articleList.getTypeName());
-                if (!map.containsKey(articleId)) {
-                    List<BlogLabelVM> labelVMS = new ArrayList<>();
-                    List<BlogTypeVM> typeVMS = new ArrayList<>();
-                    labelVMS.add(labelVM);
-                    typeVMS.add(typeVM);
-                    BlogArticleDetailVM blogArticleDetailVM = new BlogArticleDetailVM(articleId,
-                            articleList.getTitle(), articleList.getSummary(), simpleDateFormat.format(articleList.getPublishTime()),
-                            labelVMS, typeVMS);
-                    blogArticleDetailVMS.add(blogArticleDetailVM);
-                    map.put(articleId, blogArticleDetailVM);
-                } else {
-                    map.get(articleId).getLabelVMS().add(labelVM);
-                    map.get(articleId).getTypeVMS().add(typeVM);
-                }
+                BlogArticleDetailVM blogArticleDetailVM = new BlogArticleDetailVM(articleId,
+                        articleList.getTitle(), articleList.getSummary(), simpleDateFormat.format(articleList.getPublishTime()),
+                        articleList.getArticleViews(),
+                        blogLabelMap.get(articleId), blogTypeMap.get(articleId));
+                blogArticleDetailVMS.add(blogArticleDetailVM);
             }
         }
-
+        BeanUtils.copyProperties(blogArticleLists, blogArticleDetailVMS);
         return new PageInfo<>(blogArticleDetailVMS);
+    }
+
+    /**
+     * 最新文章推荐
+     *
+     * @return List<BlogArticleDetailVM>
+     */
+    @Transactional(readOnly = true)
+    public List<BlogArticleDetailVM> latestRecommendedArticles() {
+        List<BlogArticleDetailVM> blogArticleDetailVMS = new ArrayList<>();
+        List<BlogArticleList> blogArticleLists = blogArticleExtendMapper.latestRecommendedArticles();
+        if (!CollectionUtils.isEmpty(blogArticleLists)) {
+            blogArticleLists.forEach(tmp -> {
+                BlogArticleDetailVM blogArticleDetailVM = new BlogArticleDetailVM(tmp.getId(), tmp.getTitle());
+                blogArticleDetailVMS.add(blogArticleDetailVM);
+            });
+        }
+        return blogArticleDetailVMS;
     }
 }

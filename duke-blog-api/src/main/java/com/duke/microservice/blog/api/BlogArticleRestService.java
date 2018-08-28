@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 /**
  * Created duke on 2018/6/23
  */
@@ -61,7 +63,7 @@ public interface BlogArticleRestService {
     Response<BlogArticleDetailVM> select(@PathVariable(value = "id", required = false) String id);
 
     /**
-     * 博文详情
+     * 博文列表
      *
      * @param page 起始页
      * @param size 每页条数
@@ -70,4 +72,13 @@ public interface BlogArticleRestService {
     @RequestMapping(value = "/nologin/blog_article", method = RequestMethod.GET)
     Response<PageInfo<BlogArticleDetailVM>> select(@RequestParam(value = "page", required = false) Integer page,
                                                    @RequestParam(value = "size", required = false) Integer size);
+
+
+    /**
+     * 最新文章推荐
+     *
+     * @return List<BlogArticleDetailVM>
+     */
+    @RequestMapping(value = "/nologin/latest_articles", method = RequestMethod.GET)
+    Response<List<BlogArticleDetailVM>> latestRecommendedArticles();
 }

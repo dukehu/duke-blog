@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created duke on 2018/6/29
@@ -26,4 +27,12 @@ public interface BlogLabelExtendMapper {
      * @param labels 标签集合对象
      */
     void batchSave(@Param("labels") List<BlogLabel> labels);
+
+    /**
+     * 根据博文id集合查找
+     *
+     * @param articleIds 博文id集合
+     * @return List
+     */
+    List<Map<String, String>> selectByArticleIds(@Param("articleIds") List<String> articleIds);
 }

@@ -1,7 +1,5 @@
 package com.duke.microservice.blog.web.controller;
 
-import com.duke.framework.security.AuthUserDetails;
-import com.duke.framework.utils.SecurityUtils;
 import com.duke.framework.web.Response;
 import com.duke.microservice.blog.BlogConstants;
 import com.duke.microservice.blog.api.BlogArticleRestService;
@@ -15,12 +13,10 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created duke on 2018/6/23
@@ -89,5 +85,11 @@ public class BlogArticleController implements BlogArticleRestService {
     @Override
     public Response<PageInfo<BlogArticleDetailVM>> select(Integer page, Integer size) {
         return Response.ok(blogArticleService.select(page, size));
+    }
+
+    @ApiOperation(value = "最新文章推荐", notes = "最新文章推荐")
+    @Override
+    public Response<List<BlogArticleDetailVM>> latestRecommendedArticles() {
+        return Response.ok(blogArticleService.latestRecommendedArticles());
     }
 }

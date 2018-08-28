@@ -21,4 +21,17 @@
             </foreach>
         </if>
     </insert>
+
+    <select id="selectByArticleIds" resultType="java.util.Map">
+        select
+          bl.id           as id,
+          bl.name         as labelName,
+          balr.article_id as articleId
+        from blog_label bl
+                 inner join blog_article_label_r balr on balr.label_id = bl.id
+        where balr.article_id in
+        <foreach collection="articleIds" open="(" close=")" separator="," item="articleId">
+            #{articleId, jdbcType=VARCHAR}
+        </foreach>
+    </select>
 </mapper>

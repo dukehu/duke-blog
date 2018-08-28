@@ -15,8 +15,5 @@ public class BlogArticleList {
     private String title;
     private String summary;
     private Date publishTime;
-    private String labelId;
-    private String labelName;
-    private String typeId;
-    private String typeName;
+    private Integer articleViews;
 }

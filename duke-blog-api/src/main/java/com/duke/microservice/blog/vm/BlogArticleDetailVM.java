@@ -57,11 +57,25 @@ public class BlogArticleDetailVM {
      */
     private List<BlogTypeVM> typeVMS;
 
-    public BlogArticleDetailVM(String id, String title, String summary, String publishDate, List<BlogLabelVM> labelVMS, List<BlogTypeVM> typeVMS) {
+    /**
+     * 浏览次数
+     */
+    private Integer articleViews;
+
+    public BlogArticleDetailVM() {
+    }
+
+    public BlogArticleDetailVM(String id, String title) {
+        this.id = id;
+        this.title = title;
+    }
+
+    public BlogArticleDetailVM(String id, String title, String summary, String publishDate, Integer articleViews, List<BlogLabelVM> labelVMS, List<BlogTypeVM> typeVMS) {
         this.id = id;
         this.title = title;
         this.summary = summary;
         this.publishDate = publishDate;
+        this.articleViews = articleViews;
         this.labelVMS = labelVMS;
         this.typeVMS = typeVMS;
     }

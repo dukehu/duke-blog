@@ -7,16 +7,21 @@
             ba.title       AS title,
             ba.summary     AS summary,
             ba.create_time AS publishTime,
-            bl.id          AS labelId,
-            bl.`name`      AS labelName,
-            bt.id          AS typeId,
-            bt.NAME        AS typeName
+            ba.article_views as articleViews
         FROM
             blog_article ba
-            LEFT JOIN blog_article_label_r balr ON ba.id = balr.article_id
-            LEFT JOIN blog_label bl ON balr.label_id = bl.id
-            LEFT JOIN blog_article_type_r batr ON ba.id = batr.article_id
-            LEFT JOIN blog_type bt ON balr.label_id = bt.id
         WHERE ba.user_id = #{userId, jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateArticleViewsById">
+        update blog_article
+        set article_views = #{articleViews, jdbcType=INTEGER}
+        where id = #{id, jdbcType=VARCHAR};
+    </update>
+
+    <select id="latestRecommendedArticles"
+            resultType="com.duke.microservice.blog.domain.extend.BlogArticleList">
+        select id as id, title as title
+        from blog_article order by create_time desc limit 5;
     </select>
 </mapper>
