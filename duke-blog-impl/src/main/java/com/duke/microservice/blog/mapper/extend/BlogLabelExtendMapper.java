@@ -35,4 +35,11 @@ public interface BlogLabelExtendMapper {
      * @return List
      */
     List<Map<String, String>> selectByArticleIds(@Param("articleIds") List<String> articleIds);
+
+    /**
+     * 根据id删除（假删）
+     *
+     * @param id 主键
+     */
+    void deleteById(@Param("id") String id);
 }

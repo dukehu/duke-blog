@@ -18,10 +18,10 @@
         <sqlMapGenerator targetPackage="mapper/basic" targetProject="MAVEN"/>
         <javaClientGenerator  type="XMLMAPPER" targetPackage="com.duke.microservice.blog.mapper.basic" targetProject="MAVEN"/>
 
-        <table domainObjectName="BlogArticle" tableName="blog_article"/>
-        <!--<table domainObjectName="BlogLabel" tableName="blog_label"/>-->
+        <!--<table domainObjectName="BlogArticle" tableName="blog_article"/>-->
+        <table domainObjectName="BlogLabel" tableName="blog_label"/>
         <!--<table domainObjectName="BlogArticleLabelR" tableName="blog_article_label_r"/>-->
-        <!--<table domainObjectName="BlogType" tableName="blog_type"/>-->
+        <table domainObjectName="BlogType" tableName="blog_type"/>
         <!--<table domainObjectName="BlogArticleTypeR" tableName="blog_article_type_r"/>-->
     </context>
 </generatorConfiguration>

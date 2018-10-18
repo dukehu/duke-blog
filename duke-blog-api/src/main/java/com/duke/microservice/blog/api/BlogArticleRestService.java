@@ -25,24 +25,13 @@ public interface BlogArticleRestService {
      * @param blogArticleSetVM 博文设置vm
      * @return String
      */
-    @RequestMapping(value = "/blog_article/publish", method = RequestMethod.POST)
+    @RequestMapping(value = "/blog_article", method = RequestMethod.POST)
     Response<String> publish(@RequestParam(value = "blogArticleSetVM", required = false) BlogArticleSetVM blogArticleSetVM);
 
     @RequestMapping(value = "/blog_article/update/{id}", method = RequestMethod.PUT)
     Response<String> update(
             @PathVariable(value = "id", required = false) String id,
             @RequestParam(value = "blogArticleSetVM", required = false) BlogArticleSetVM blogArticleSetVM);
-
-    /**
-     * 存草稿
-     *
-     * @param id               主键
-     * @param blogArticleSetVM 博文设置vm
-     * @return String
-     */
-    @RequestMapping(value = "/blog_article/draft/{id}", method = RequestMethod.POST)
-    Response<String> draft(@PathVariable(value = "id", required = false) String id,
-                           @RequestParam(value = "blogArticleSetVM", required = false) BlogArticleSetVM blogArticleSetVM);
 
     /**
      * 删除博文
@@ -67,11 +56,15 @@ public interface BlogArticleRestService {
      *
      * @param page 起始页
      * @param size 每页条数
+     * @param tag  标签
+     * @param type 类别
      * @return BlogArticleSetVM
      */
     @RequestMapping(value = "/nologin/blog_article", method = RequestMethod.GET)
     Response<PageInfo<BlogArticleDetailVM>> select(@RequestParam(value = "page", required = false) Integer page,
-                                                   @RequestParam(value = "size", required = false) Integer size);
+                                                   @RequestParam(value = "size", required = false) Integer size,
+                                                   @RequestParam(value = "tag", required = false) String tag,
+                                                   @RequestParam(value = "type", required = false) String type);
 
 
     /**
@@ -81,4 +74,13 @@ public interface BlogArticleRestService {
      */
     @RequestMapping(value = "/nologin/latest_articles", method = RequestMethod.GET)
     Response<List<BlogArticleDetailVM>> latestRecommendedArticles();
+
+    /**
+     * 文章归档查询
+     * todo 后期改
+     *
+     * @return List<BlogArticleDetailVM>
+     */
+    @RequestMapping(value = "/nologin/archive_query", method = RequestMethod.GET)
+    Response<List<BlogArticleDetailVM>> archiveQuery();
 }

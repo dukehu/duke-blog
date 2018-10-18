@@ -7,6 +7,7 @@
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from blog_label
@@ -14,25 +15,28 @@
   </delete>
   <insert id="insert" parameterType="com.duke.microservice.blog.domain.basic.BlogLabel" >
     insert into blog_label (id, name, create_time, 
-      modify_time, user_id)
+      modify_time, user_id, status
+      )
     values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{modifyTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR})
+      #{modifyTime,jdbcType=TIMESTAMP}, #{userId,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}
+      )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.duke.microservice.blog.domain.basic.BlogLabel" >
     update blog_label
     set name = #{name,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-      user_id = #{userId,jdbcType=VARCHAR}
+      user_id = #{userId,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
-    select id, name, create_time, modify_time, user_id
+    select id, name, create_time, modify_time, user_id, status
     from blog_label
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <select id="selectAll" resultMap="BaseResultMap" >
-    select id, name, create_time, modify_time, user_id
+    select id, name, create_time, modify_time, user_id, status
     from blog_label
   </select>
 </mapper>

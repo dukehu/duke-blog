@@ -10,7 +10,22 @@
             ba.article_views as articleViews
         FROM
             blog_article ba
-        WHERE ba.user_id = #{userId, jdbcType=VARCHAR}
+            <if test="tag != null and tag != ''">
+                inner join blog_article_label_r balr on balr.article_id = ba.id
+                inner join blog_label bl on bl.id = balr.label_id
+            </if>
+            <if test="type != null and type != ''">
+                inner join blog_article_type_r batr on batr.article_id = ba.id
+                inner join blog_type bt on bt.id = batr.type_id
+            </if>
+        WHERE ba.user_id = #{userId, jdbcType=VARCHAR} and ba.`status` = 1
+            <if test="tag != null and tag != ''">
+                and bl.name = #{tag, jdbcType=VARCHAR}
+            </if>
+            <if test="type != null and type != ''">
+                and bt.name = #{type, jdbcType=VARCHAR}
+            </if>
+        order by ba.create_time desc
     </select>
 
     <update id="updateArticleViewsById">
@@ -24,4 +39,45 @@
         select id as id, title as title
         from blog_article order by create_time desc limit 5;
     </select>
+
+    <select id="archiveQuery" resultType="com.duke.microservice.blog.domain.extend.BlogArticleList">
+        select id as id, title as title, create_time as publishTime
+        from blog_article order by create_time desc;
+    </select>
+
+    <select id="selectPreviousArticles" resultType="com.duke.microservice.blog.domain.extend.BlogArticleDetail">
+        select id, title
+        from blog_article
+        where create_time &gt; #{createTime, jdbcType=VARCHAR}
+        order by create_time desc;
+    </select>
+
+    <select id="selectNextArticles" resultType="com.duke.microservice.blog.domain.extend.BlogArticleDetail">
+        select id, title
+        from blog_article
+        where create_time &lt; #{createTime, jdbcType=VARCHAR}
+        order by create_time desc;
+    </select>
+
+    <select id="selectById" resultType="com.duke.microservice.blog.domain.extend.BlogArticleDetail">
+        select ba.id          as id,
+               ba.title        as title,
+               ba.navigation   as navigation,
+               ba.summary      as summary,
+               ba.create_time  as publishDate,
+               ba.md_content   as mdContent,
+               ba.html_content as htmlContent,
+               bl.id           as labelId,
+               bl.name         as labelName,
+               bt.id           as typeId,
+               bt.name         as typeName,
+               ba.article_views as articleViews
+        from blog_article ba
+                 left join blog_article_label_r balr on balr.article_id = ba.id
+                 left join blog_label bl on bl.id = balr.label_id
+                 left join blog_article_type_r batr on batr.article_id = ba.id
+                 left join blog_type bt on batr.type_id = bt.id
+        where ba.id = #{id, jdbcType=VARCHAR}
+    </select>
+
 </mapper>

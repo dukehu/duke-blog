@@ -46,6 +46,7 @@ create table blog_label
    create_time          datetime not null,
    modify_time          datetime not null,
    user_id              varchar(50) not null comment '此字段先预留',
+   status               int(1) not null,
    primary key (id)
 );
 alter table blog_label comment '博文标签表';
@@ -56,6 +57,8 @@ create table blog_type
    name                 varchar(10) not null,
    create_time          datetime not null,
    modify_time          datetime not null,
-   user_id              varchar(50) not null comment '此字段先预留'
+   user_id              varchar(50) not null comment '此字段先预留',
+   status               int(1) not null,
+   primary key (id)
 );
 alter table blog_type comment '博文类别表';

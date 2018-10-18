@@ -27,4 +27,21 @@ public class BlogConstants {
         @Getter
         private String desc;
     }
+
+    /**
+     * 删除状态
+     */
+    @AllArgsConstructor
+    public enum DELETE_STATUS {
+        /**
+         * 0：未删除 1：已删除
+         */
+        NOT_DELETE(0, "未删除"),
+        DELETED(1, "已删除");
+
+        @Getter
+        private int code;
+        @Getter
+        private String desc;
+    }
 }

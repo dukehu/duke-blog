@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.duke.microservice.blog.mapper.extend.BlogTypeExtendMapper">
+    <select id="selectByUserId" resultType="com.duke.microservice.blog.domain.basic.BlogType">
+        select
+            id   as id,
+            name as name
+        from blog_type
+        where user_id = #{userId, jdbcType=VARCHAR} and `status` = 0;
+    </select>
+
+    <insert id="batchSave">
+        <if test="types != null and types.size() > 0">
+            insert into blog_type(id, `name`, create_time, modify_time, user_id, status)
+            <foreach collection="types" item="type" separator="," open="values">
+                (#{type.id, jdbcType=VARCHAR},
+                #{type.name, jdbcType=VARCHAR},
+                #{type.createTime, jdbcType=VARCHAR},
+                #{type.modifyTime, jdbcType=VARCHAR},
+                #{type.userId, jdbcType=VARCHAR},
+                0)
+            </foreach>
+        </if>
+    </insert>
+
+    <select id="selectByArticleIds" resultType="java.util.Map">
+        select
+          bt.id           as id,
+          bt.name         as labelName,
+          batr.article_id as articleId
+        from blog_type bt
+                 inner join blog_article_type_r batr on batr.type_id = bt.id
+        where batr.article_id in
+        <foreach collection="articleIds" open="(" close=")" separator="," item="articleId">
+            #{articleId, jdbcType=VARCHAR}
+        </foreach>
+    </select>
+
+    <update id="deleteById">
+        update blog_type set status = 1, modify_time = now() where id = #{id, jdbcType=VARCHAR};
+    </update>
+
+    <select id="selectArticleCountsByTypeIds"
+            resultType="com.duke.microservice.blog.domain.extend.ArticleCount">
+        SELECT
+               type_id AS typeId,
+               count(article_id) AS articleCount
+        FROM
+             blog_article_type_r
+        where type_id in
+        <foreach collection="typeIds" item="typeId" close=")" open="(" separator=",">
+            #{typeId, jdbcType=VARCHAR}
+        </foreach>
+        GROUP BY type_id
+    </select>
+</mapper>

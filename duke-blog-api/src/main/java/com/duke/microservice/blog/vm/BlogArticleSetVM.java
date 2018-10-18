@@ -22,22 +22,24 @@ public class BlogArticleSetVM {
     @Length(max = 100, min = 1, message = "博文标题长度应为1-100之间！")
     private String title;
 
-    @ApiModelProperty(value = "导航目录", required = true)
-    @NotBlank(message = "导航目录不能为空！")
-    @Length(max = 10000, min = 1, message = "博文html原数据长度应为1-3之间！")
+    @ApiModelProperty(value = "导航目录")
+    @Length(max = 10000, message = "导航目录长度应为1-10000之间！")
     private String navigation;
 
     @ApiModelProperty(value = "博文html原数据", required = true)
     @NotBlank(message = "博文html原数据不能为空")
-    @Length(max = 10000, min = 1, message = "博文html原数据长度应为1-3之间！")
+    @Length(max = 10000, min = 1, message = "博文html原数据长度应为1-10000之间！")
     private String htmlContent;
 
     @ApiModelProperty(value = "markdown原数据", required = true)
-    @NotBlank(message = "博文html原数据不能为空")
-    @Length(max = 10000, min = 1, message = "博文html原数据长度应为1-3之间！")
+    @NotBlank(message = "markdown原数据不能为空")
+    @Length(max = 10000, min = 1, message = "markdown原数据长度应为1-3之间！")
     private String mdContent;
 
-    private List<BlogLabelVM> blogLabelVMS;
+    @ApiModelProperty(value = "是否为草稿（1：不是 2：是）", required = true, allowableValues = "1, 2")
+    private Integer isDraft;
 
-    private List<BlogTypeVM> blogTypeVMS;
+    private List<String> labelIds;
+
+    private List<String> typeIds;
 }

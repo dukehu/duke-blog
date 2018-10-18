@@ -6,18 +6,19 @@
             id   as id,
             name as name
         from blog_label
-        where user_id = #{userId, jdbcType=VARCHAR};
+        where user_id = #{userId, jdbcType=VARCHAR} and `status` = 0;
     </select>
 
     <insert id="batchSave">
         <if test="labels != null and labels.size() > 0">
-            insert into blog_label(id, `name`, create_time, modify_time, user_id)
+            insert into blog_label(id, `name`, create_time, modify_time, user_id, status)
             <foreach collection="labels" item="label" separator="," open="values">
                 (#{label.id, jdbcType=VARCHAR},
                 #{label.name, jdbcType=VARCHAR},
                 #{label.createTime, jdbcType=VARCHAR},
                 #{label.modifyTime, jdbcType=VARCHAR},
-                #{label.userId, jdbcType=VARCHAR})
+                #{label.userId, jdbcType=VARCHAR},
+                0)
             </foreach>
         </if>
     </insert>
@@ -34,4 +35,8 @@
             #{articleId, jdbcType=VARCHAR}
         </foreach>
     </select>
+
+    <update id="deleteById">
+        update blog_label set status = 1, modify_time = now() where id = #{id, jdbcType=VARCHAR}
+    </update>
 </mapper>

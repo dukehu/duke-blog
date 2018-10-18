@@ -27,4 +27,6 @@ public class BlogTypeVM {
     @Length(max = 10, min = 1, message = "长度应为1-10！")
     private String name;
 
+    @ApiModelProperty(hidden = true)
+    private int articleCount;
 }

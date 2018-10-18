@@ -62,6 +62,16 @@ public class BlogArticleDetailVM {
      */
     private Integer articleViews;
 
+    /**
+     * 上一篇
+     */
+    private BlogArticleDetailVM previousArticle;
+
+    /**
+     * 下一篇
+     */
+    private BlogArticleDetailVM nextArticle;
+
     public BlogArticleDetailVM() {
     }
 
@@ -80,12 +90,16 @@ public class BlogArticleDetailVM {
         this.typeVMS = typeVMS;
     }
 
-    public BlogArticleDetailVM(String id, String title, String navigation, String publishDate, String mdContent, String htmlContent) {
+    public BlogArticleDetailVM(String id, String title, String navigation, String publishDate, String mdContent, String htmlContent, List<BlogLabelVM> labelVMS, List<BlogTypeVM> typeVMS, BlogArticleDetailVM previousArticle, BlogArticleDetailVM nextArticle) {
         this.id = id;
         this.title = title;
         this.navigation = navigation;
         this.publishDate = publishDate;
         this.mdContent = mdContent;
         this.htmlContent = htmlContent;
+        this.labelVMS = labelVMS;
+        this.typeVMS = typeVMS;
+        this.previousArticle = previousArticle;
+        this.nextArticle = nextArticle;
     }
 }
