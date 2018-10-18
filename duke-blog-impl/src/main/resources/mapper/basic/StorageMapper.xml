@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.duke.microservice.blog.mapper.basic.StorageMapper" >
+  <resultMap id="BaseResultMap" type="com.duke.microservice.blog.domain.basic.Storage" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="suffix" property="suffix" jdbcType="VARCHAR" />
+    <result column="service_id" property="serviceId" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="size" property="size" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="upload_time" property="uploadTime" jdbcType="TIMESTAMP" />
+    <result column="delete_time" property="deleteTime" jdbcType="TIMESTAMP" />
+    <result column="md5" property="md5" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from storage
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.duke.microservice.blog.domain.basic.Storage" >
+    insert into storage (id, name, suffix, 
+      service_id, path, size, 
+      status, user_id, type, 
+      upload_time, delete_time, md5
+      )
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{suffix,jdbcType=VARCHAR}, 
+      #{serviceId,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{size,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{uploadTime,jdbcType=TIMESTAMP}, #{deleteTime,jdbcType=TIMESTAMP}, #{md5,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.duke.microservice.blog.domain.basic.Storage" >
+    update storage
+    set name = #{name,jdbcType=VARCHAR},
+      suffix = #{suffix,jdbcType=VARCHAR},
+      service_id = #{serviceId,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      size = #{size,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      upload_time = #{uploadTime,jdbcType=TIMESTAMP},
+      delete_time = #{deleteTime,jdbcType=TIMESTAMP},
+      md5 = #{md5,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select id, name, suffix, service_id, path, size, status, user_id, type, upload_time, 
+    delete_time, md5
+    from storage
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, name, suffix, service_id, path, size, status, user_id, type, upload_time, 
+    delete_time, md5
+    from storage
+  </select>
+</mapper>

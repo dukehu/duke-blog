@@ -23,7 +23,7 @@ security:
   oauth2:
     resource:
       service-id: duke-auth
-      user-info-uri: http://localhost:5285/user/duke-blog
+      user-info-uri: http://localhost:5285/auth/user/duke-blog
 
 management:
   security:
@@ -34,23 +34,9 @@ logging:
   file: ./logs/blog.log
   level:
     root: info
+    #com.duke.microservice.blog.mapper: debug
 
 debug: true
-
-duke:
-  sqllog:
-    enabled: true
-  redisson:
-    enabled: false
-  swagger:
-    enabled: true #开启swagger,默认为开启
-    title: blog api
-    description: 博客项目服务
-    version:
-    termsOfServiceUrl:
-    license:
-    licenseUrl:
-    basePackage: com.duke.microservice.blog
 
 mybatis:
     mapper-locations: classpath*:mapper/**/*Mapper.xml

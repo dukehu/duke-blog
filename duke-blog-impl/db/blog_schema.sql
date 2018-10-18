@@ -3,6 +3,7 @@ drop table if exists blog_article_label_r;
 drop table if exists blog_article_type_r;
 drop table if exists blog_label;
 drop table if exists blog_type;
+drop table if exists storage;
 
 create table blog_article
 (
@@ -62,3 +63,21 @@ create table blog_type
    primary key (id)
 );
 alter table blog_type comment '博文类别表';
+
+create table storage
+(
+  id                   varchar(50) not null,
+  md5                  varbinary(50) not null comment '文件md5值',
+  name                 varchar(200) not null,
+  suffix               varchar(10) not null,
+  service_id           varchar(20) not null,
+  path                 varchar(200) not null,
+  size                 int(20) not null,
+  status               int(1) not null,
+  user_id              varchar(50) not null,
+  type                 int(1) not null comment '文档，视频，音频，图片，其他',
+  upload_time          datetime not null,
+  delete_time          datetime not null,
+  primary key (id)
+);
+alter table storage comment '文件存储表';

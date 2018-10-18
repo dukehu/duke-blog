@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.duke.microservice.blog.mapper.extend.StorageExtendMapper">
+    <select id="selectByMD5" resultType="com.duke.microservice.blog.domain.basic.Storage">
+        select
+            id          as id,
+            `name`      as name,
+            suffix      as suffix,
+            service_id  as serviceId,
+            path        as path,
+            size        as size,
+            `status`    as status,
+            user_id     as userId,
+            type        as type,
+            upload_time as uploadTime,
+            delete_time as deleteTime,
+            md5         as md5
+        from storage
+        where
+            md5 = #{md5, jdbcType=VARCHAR};
+    </select>
+</mapper>

@@ -44,4 +44,21 @@ public class BlogConstants {
         @Getter
         private String desc;
     }
+
+    /**
+     * 文件状态
+     */
+    @AllArgsConstructor
+    public enum FILE_STATUS {
+        /**
+         * 0：删除  1：存在
+         */
+        DELETED(0, "删除"),
+        EXIST(1, "发布");
+
+        @Getter
+        private Integer code;
+        @Getter
+        private String desc;
+    }
 }
