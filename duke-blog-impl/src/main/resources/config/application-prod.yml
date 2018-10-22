@@ -3,6 +3,8 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/duke_blog?useUnicode=true&characterEncoding=utf8&useSSL=false
     username: root
     password: Duke@0417
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:/home/files
 
 duke:
   sqllog:

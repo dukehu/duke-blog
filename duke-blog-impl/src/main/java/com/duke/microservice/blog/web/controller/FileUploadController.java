@@ -38,8 +38,16 @@ public class FileUploadController {
                                        @RequestParam(value = "serviceId", required = false) String serviceId,
                                        @RequestParam(value = "md5", required = false) String md5,
                                        HttpServletRequest request) {
-        fileUploadService.fileUpload(file, serviceId, md5);
-        return Response.ok();
+        String filePath = fileUploadService.fileUpload(file, serviceId, md5);
+        String url = request.getScheme() +
+                "://" +
+                request.getServerName() +
+                ":" +
+                request.getServerPort() +
+                "/api/blog" +
+                request.getContextPath() +
+                filePath;
+        return Response.ok(url);
     }
 
     @ApiImplicitParams({

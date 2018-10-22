@@ -51,7 +51,7 @@ public class FileUploadService {
      * @param multipartFile 文件对象
      * @param serviceId     服务id
      */
-    public void fileUpload(MultipartFile multipartFile, String serviceId, String md5) {
+    public String fileUpload(MultipartFile multipartFile, String serviceId, String md5) {
         // todo 获得用户信息
         AuthUserDetails authUserDetails = SecurityUtils.getCurrentUserInfo();
         String userId = authUserDetails.getUserId();
@@ -108,6 +108,7 @@ public class FileUploadService {
         storage.setUploadTime(date);
         storage.setDeleteTime(date);
         storageMapper.insert(storage);
+        return relativeFilePath + "/" + id + "." + fileSuffix;
     }
 
     /**
