@@ -1,5 +1,6 @@
 package com.duke.microservice.blog.service;
 
+import com.duke.framework.CoreConstants;
 import com.duke.framework.domain.DBProperties;
 import com.duke.framework.exception.BusinessException;
 import com.duke.framework.security.AuthUserDetails;
@@ -10,6 +11,7 @@ import com.duke.microservice.blog.BlogConstants;
 import com.duke.microservice.blog.domain.basic.BlogArticle;
 import com.duke.microservice.blog.domain.basic.BlogArticleLabelR;
 import com.duke.microservice.blog.domain.basic.BlogArticleTypeR;
+import com.duke.microservice.blog.domain.basic.BlogType;
 import com.duke.microservice.blog.domain.extend.BlogArticleDetail;
 import com.duke.microservice.blog.domain.extend.BlogArticleList;
 import com.duke.microservice.blog.mapper.basic.BlogArticleMapper;
@@ -74,7 +76,7 @@ public class BlogArticleService {
      *
      * @param blogArticleSetVM 博文设置对象
      */
-    public void setBlogArticle(BlogArticleSetVM blogArticleSetVM, String id) {
+    public void setBlogArticle(BlogArticleSetVM blogArticleSetVM, String id, String saveOrUpdate) {
         // 统一处理异常 https://blog.csdn.net/hao_kkkkk/article/details/80538955
         // todo 这个ValidationUtils.validate好像是不能对对象里面的对象进行校验的，抽时间看一下
         ValidationUtils.validate(blogArticleSetVM, "blogArticleSetVM", "参数校验失败！");
@@ -86,20 +88,29 @@ public class BlogArticleService {
         // 标签
         List<String> labelIds = blogArticleSetVM.getLabelIds();
 
-        BlogArticle blogArticle = new BlogArticle();
-        BeanUtils.copyProperties(blogArticleSetVM, blogArticle);
+        BlogArticle blogArticle;
         Date date = new Date();
-        blogArticle.setId(UUID.randomUUID().toString());
+        if (CoreConstants.UPDATE.equalsIgnoreCase(saveOrUpdate)) {
+            // 修改
+            blogArticle = this.exit(id);
+            blogArticleLabelRService.deleteByArticleId(id);
+            blogArticleTypeRService.deleteByArticleId(id);
+        } else {
+            // 新增
+            blogArticle = new BlogArticle();
+            blogArticle.setId(UUID.randomUUID().toString());
+            blogArticle.setUserId(userId);
+            blogArticle.setCreateTime(date);
+            blogArticle.setArticleViews(1);
+            blogArticle.setStatus(blogArticleSetVM.getIsDraft());
+        }
+        BeanUtils.copyProperties(blogArticleSetVM, blogArticle);
         // 处理摘要
         String stripHtml = stripHtml(blogArticleSetVM.getHtmlContent());
         blogArticle.setNavigation(blogArticleSetVM.getNavigation());
         blogArticle.setSummary(stripHtml.substring(0, stripHtml.length() > 50 ? 50 : stripHtml.length()));
         blogArticle.setStatus(BlogConstants.BLOG_STATUS.PULISHED.getCode());
-        blogArticle.setCreateTime(date);
         blogArticle.setModifyTime(date);
-        blogArticle.setUserId(userId);
-        blogArticle.setArticleViews(1);
-        blogArticle.setStatus(blogArticleSetVM.getIsDraft());
 
         if (!CollectionUtils.isEmpty(labelIds)) {
             this.setLabels(labelIds, blogArticle.getId());
@@ -107,7 +118,12 @@ public class BlogArticleService {
         if (!CollectionUtils.isEmpty(typeIds)) {
             this.setTypes(typeIds, blogArticle.getId());
         }
-        blogArticleMapper.insert(blogArticle);
+
+        if (CoreConstants.UPDATE.equalsIgnoreCase(saveOrUpdate)) {
+            blogArticleMapper.updateByPrimaryKey(blogArticle);
+        } else {
+            blogArticleMapper.insert(blogArticle);
+        }
     }
 
     private String stripHtml(String content) {
@@ -164,10 +180,11 @@ public class BlogArticleService {
     /**
      * 根据主键查找博文详情
      *
-     * @param id 主键
+     * @param id        主键
+     * @param needLogin 是否需要登陆
      * @return BlogArticleDetailVM
      */
-    public BlogArticleDetailVM selectById(String id) {
+    public BlogArticleDetailVM selectById(String id, boolean needLogin) {
         // 校验主键有效性
         ValidationUtils.notEmpty(id, "id", "标题主键不能为空！");
 
@@ -208,42 +225,50 @@ public class BlogArticleService {
                 }
             }
 
-            // 访问次数加一
-            blogArticleExtendMapper.updateArticleViewsById(id, blogArticle.getArticleViews() + 1);
-
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String createTimeStr = simpleDateFormat.format(blogArticle.getPublishDate());
 
-            List<BlogArticleDetail> previousArticles = blogArticleExtendMapper.selectPreviousArticles(createTimeStr);
-
-            List<BlogArticleDetail> nextArticles = blogArticleExtendMapper.selectNextArticles(createTimeStr);
-            BlogArticleDetailVM previousArticleVM = null;
-            BlogArticleDetailVM nextArticleVM = null;
-            if (!CollectionUtils.isEmpty(previousArticles)) {
-                BlogArticleDetail previousArticle = previousArticles.get(0);
-                String tmpId = previousArticle.getId();
-                List<String> articleIds = new ArrayList<>();
-                articleIds.add(tmpId);
-                Map<String, List<BlogLabelVM>> tmpMap = blogLabelService.selectByArticleIds(articleIds);
-                previousArticleVM = new BlogArticleDetailVM(tmpId, previousArticle.getTitle());
-                previousArticleVM.setLabelVMS(tmpMap.get(tmpId));
-            }
-            if (!CollectionUtils.isEmpty(nextArticles)) {
-                BlogArticleDetail nextArticle = nextArticles.get(0);
-                String tmpId = nextArticle.getId();
-                List<String> articleIds = new ArrayList<>();
-                articleIds.add(tmpId);
-                Map<String, List<BlogLabelVM>> tmpMap = blogLabelService.selectByArticleIds(articleIds);
-                nextArticleVM = new BlogArticleDetailVM(nextArticle.getId(), nextArticle.getTitle());
-                nextArticleVM.setLabelVMS(tmpMap.get(tmpId));
-            }
-            return new BlogArticleDetailVM(blogArticle.getId(), blogArticle.getTitle(), blogArticle.getNavigation(),
+            BlogArticleDetailVM detailVM = new BlogArticleDetailVM(blogArticle.getId(), blogArticle.getTitle(), blogArticle.getNavigation(),
                     createTimeStr, blogArticle.getMdContent(), blogArticle.getHtmlContent(),
-                    blogLabelVMS, blogTypeVMS, previousArticleVM, nextArticleVM);
+                    blogLabelVMS, blogTypeVMS);
+            if (!needLogin) {
+                // 访问次数加一
+                blogArticleExtendMapper.updateArticleViewsById(id, blogArticle.getArticleViews() + 1);
+                this.setPreviousNextArticle(createTimeStr, detailVM);
+            }
+            return detailVM;
         } else {
             throw new BusinessException("id为" + id + "的文章不存在!");
         }
 
+    }
+
+    private void setPreviousNextArticle(String createTimeStr, BlogArticleDetailVM detailVM) {
+        List<BlogArticleDetail> previousArticles = blogArticleExtendMapper.selectPreviousArticles(createTimeStr);
+
+        List<BlogArticleDetail> nextArticles = blogArticleExtendMapper.selectNextArticles(createTimeStr);
+        BlogArticleDetailVM previousArticleVM = null;
+        BlogArticleDetailVM nextArticleVM = null;
+        if (!CollectionUtils.isEmpty(previousArticles)) {
+            BlogArticleDetail previousArticle = previousArticles.get(0);
+            String tmpId = previousArticle.getId();
+            List<String> articleIds = new ArrayList<>();
+            articleIds.add(tmpId);
+            Map<String, List<BlogLabelVM>> tmpMap = blogLabelService.selectByArticleIds(articleIds);
+            previousArticleVM = new BlogArticleDetailVM(tmpId, previousArticle.getTitle());
+            previousArticleVM.setLabelVMS(tmpMap.get(tmpId));
+        }
+        if (!CollectionUtils.isEmpty(nextArticles)) {
+            BlogArticleDetail nextArticle = nextArticles.get(0);
+            String tmpId = nextArticle.getId();
+            List<String> articleIds = new ArrayList<>();
+            articleIds.add(tmpId);
+            Map<String, List<BlogLabelVM>> tmpMap = blogLabelService.selectByArticleIds(articleIds);
+            nextArticleVM = new BlogArticleDetailVM(nextArticle.getId(), nextArticle.getTitle());
+            nextArticleVM.setLabelVMS(tmpMap.get(tmpId));
+        }
+        detailVM.setPreviousArticle(previousArticleVM);
+        detailVM.setNextArticle(nextArticleVM);
     }
 
     /**
@@ -267,17 +292,26 @@ public class BlogArticleService {
     /**
      * 博客列表
      *
+     * @param page      起始页
+     * @param size      每页条数
+     * @param tag       标签
+     * @param type      类别
+     * @param needLogin 是否需要登陆
      * @return PageInfo<BlogArticleDetailVM>
      */
     @Transactional(readOnly = true)
-    public PageInfo<BlogArticleDetailVM> select(Integer page, Integer size, String tag, String type) {
+    public PageInfo<BlogArticleDetailVM> select(Integer page, Integer size, String tag, String type, boolean needLogin) {
         String userId = "b66a3fe7-8fdd-11e8-bcd8-18dbf21f6c28";
         try {
             // 获取用户信息
             AuthUserDetails authUserDetails = SecurityUtils.getCurrentUserInfo();
             userId = authUserDetails.getUserId();
         } catch (Exception e) {
-            log.info("无登录用户，查询所有");
+            if (needLogin) {
+                throw new BusinessException("无登录用户！");
+            } else {
+                log.info("无登录用户，查询所有");
+            }
         }
 
         if (ObjectUtils.isEmpty(page) || ObjectUtils.isEmpty(size)) {
@@ -286,9 +320,13 @@ public class BlogArticleService {
         }
         PageHelper.startPage(page, size);
         List<BlogArticleList> blogArticleLists = blogArticleExtendMapper.selectByUserId(userId, tag, type);
-        List<String> articleIds = blogArticleLists.stream().map(BlogArticleList::getId).collect(Collectors.toList());
-        Map<String, List<BlogLabelVM>> blogLabelMap = blogLabelService.selectByArticleIds(articleIds);
-        Map<String, List<BlogTypeVM>> blogTypeMap = blogTypeService.selectByArticleIds(articleIds);
+        Map<String, List<BlogLabelVM>> blogLabelMap = new HashMap<>();
+        Map<String, List<BlogTypeVM>> blogTypeMap = new HashMap<>();
+        if (!needLogin) {
+            List<String> articleIds = blogArticleLists.stream().map(BlogArticleList::getId).collect(Collectors.toList());
+            blogLabelMap = blogLabelService.selectByArticleIds(articleIds);
+            blogTypeMap = blogTypeService.selectByArticleIds(articleIds);
+        }
 
         List<BlogArticleDetailVM> blogArticleDetailVMS = new Page<>();
         if (!CollectionUtils.isEmpty(blogArticleLists)) {

@@ -18,4 +18,11 @@ public interface BlogArticleLabelRExtendMapper {
      * @param articleLabelRS 博文标签关系对象
      */
     void batchSave(@Param("articleLabelRS") List<BlogArticleLabelR> articleLabelRS);
+
+    /**
+     * 根据文章id删除
+     *
+     * @param articleId 文章id
+     */
+    void deleteByArticleId(@Param("articleId") String articleId);
 }

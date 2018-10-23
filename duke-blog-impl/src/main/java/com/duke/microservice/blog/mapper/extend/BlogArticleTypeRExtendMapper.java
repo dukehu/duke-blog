@@ -18,4 +18,11 @@ public interface BlogArticleTypeRExtendMapper {
      * @param articleTypeRS 博文类别关系对象
      */
     void batchSave(@Param("articleTypeRS") List<BlogArticleTypeR> articleTypeRS);
+
+    /**
+     * 根据文章id删除
+     *
+     * @param articleId 文章id
+     */
+    void deleteByArticleId(@Param("articleId") String articleId);
 }

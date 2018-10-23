@@ -1,5 +1,6 @@
 package com.duke.microservice.blog.web.controller;
 
+import com.duke.framework.CoreConstants;
 import com.duke.framework.web.Response;
 import com.duke.microservice.blog.api.BlogArticleRestService;
 import com.duke.microservice.blog.service.BlogArticleService;
@@ -31,7 +32,7 @@ public class BlogArticleController implements BlogArticleRestService {
     @PreAuthorize("hasAuthority('admin') or hasAuthority('blog_blog_article_publish')")
     @Override
     public Response<String> publish(BlogArticleSetVM blogArticleSetVM) {
-        blogArticleService.setBlogArticle(blogArticleSetVM, null);
+        blogArticleService.setBlogArticle(blogArticleSetVM, null, CoreConstants.SAVE);
         return Response.ok();
     }
 
@@ -43,7 +44,7 @@ public class BlogArticleController implements BlogArticleRestService {
     @PreAuthorize("hasAuthority('admin') or hasAuthority('blog_blog_article_update')")
     public Response<String> update(@PathVariable String id,
                                    BlogArticleSetVM blogArticleSetVM) {
-        blogArticleService.setBlogArticle(blogArticleSetVM, id);
+        blogArticleService.setBlogArticle(blogArticleSetVM, id, CoreConstants.UPDATE);
         return Response.ok();
     }
 
@@ -60,10 +61,20 @@ public class BlogArticleController implements BlogArticleRestService {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "id", value = "主键", dataType = "string", paramType = "path", required = true)
     })
-    @ApiOperation(value = "详情", notes = "详情")
+    @ApiOperation(value = "详情（不需要登陆）", notes = "详情")
     @Override
-    public Response<BlogArticleDetailVM> select(@PathVariable(value = "id", required = false) String id) {
-        return Response.ok(blogArticleService.selectById(id));
+    public Response<BlogArticleDetailVM> selectByIdNologin(@PathVariable(value = "id", required = false) String id) {
+        return Response.ok(blogArticleService.selectById(id, false));
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "主键", dataType = "string", paramType = "path", required = true)
+    })
+    @ApiOperation(value = "详情（不需要登陆）", notes = "详情")
+    @PreAuthorize("hasAuthority('admin') or hasAuthority('blog_blog_article_selectById')")
+    @Override
+    public Response<BlogArticleDetailVM> selectById(@PathVariable(value = "id", required = false) String id) {
+        return Response.ok(blogArticleService.selectById(id, true));
     }
 
     @ApiImplicitParams({
@@ -72,10 +83,21 @@ public class BlogArticleController implements BlogArticleRestService {
             @ApiImplicitParam(name = "tag", value = "标签", dataType = "int", paramType = "query"),
             @ApiImplicitParam(name = "type", value = "类别", dataType = "int", paramType = "query")
     })
-    @ApiOperation(value = "列表", notes = "列表")
+    @ApiOperation(value = "列表（不需要登陆）", notes = "列表")
     @Override
-    public Response<PageInfo<BlogArticleDetailVM>> select(Integer page, Integer size, String tag, String type) {
-        return Response.ok(blogArticleService.select(page, size, tag, type));
+    public Response<PageInfo<BlogArticleDetailVM>> selectNologin(Integer page, Integer size, String tag, String type) {
+        return Response.ok(blogArticleService.select(page, size, tag, type, false));
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "page", value = "起始页码", dataType = "int", paramType = "query"),
+            @ApiImplicitParam(name = "size", value = "每页条数", dataType = "int", paramType = "query")
+    })
+    @ApiOperation(value = "列表", notes = "列表")
+    @PreAuthorize("hasAuthority('admin') or hasAuthority('blog_blog_article_select')")
+    @Override
+    public Response<PageInfo<BlogArticleDetailVM>> select(Integer page, Integer size) {
+        return Response.ok(blogArticleService.select(page, size, null, null, true));
     }
 
     @ApiOperation(value = "最新文章推荐", notes = "最新文章推荐")

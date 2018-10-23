@@ -11,4 +11,10 @@
             </foreach>
         </if>
     </insert>
+
+    <delete id="deleteByArticleId">
+        delete
+        from blog_article_label_r
+        where article_id = #{articleId, jdbcType=VARCHAR};
+    </delete>
 </mapper>

@@ -43,16 +43,25 @@ public interface BlogArticleRestService {
     Response<String> delete(@PathVariable(value = "id", required = false) String id);
 
     /**
-     * 博文详情
+     * 博文详情，不需要登陆的
      *
      * @param id 主键
      * @return BlogArticleSetVM
      */
     @RequestMapping(value = "/nologin/blog_article/{id}", method = RequestMethod.GET)
-    Response<BlogArticleDetailVM> select(@PathVariable(value = "id", required = false) String id);
+    Response<BlogArticleDetailVM> selectByIdNologin(@PathVariable(value = "id", required = false) String id);
 
     /**
-     * 博文列表
+     * 博文详情，需要登陆的
+     *
+     * @param id 主键
+     * @return BlogArticleSetVM
+     */
+    @RequestMapping(value = "/blog_article/{id}", method = RequestMethod.GET)
+    Response<BlogArticleDetailVM> selectById(@PathVariable(value = "id", required = false) String id);
+
+    /**
+     * 博文列表，不需要登陆
      *
      * @param page 起始页
      * @param size 每页条数
@@ -61,10 +70,21 @@ public interface BlogArticleRestService {
      * @return BlogArticleSetVM
      */
     @RequestMapping(value = "/nologin/blog_article", method = RequestMethod.GET)
-    Response<PageInfo<BlogArticleDetailVM>> select(@RequestParam(value = "page", required = false) Integer page,
+    Response<PageInfo<BlogArticleDetailVM>> selectNologin(@RequestParam(value = "page", required = false) Integer page,
                                                    @RequestParam(value = "size", required = false) Integer size,
                                                    @RequestParam(value = "tag", required = false) String tag,
                                                    @RequestParam(value = "type", required = false) String type);
+
+    /**
+     * 博文列表，需要登陆
+     *
+     * @param page 起始页
+     * @param size 每页条数
+     * @return BlogArticleSetVM
+     */
+    @RequestMapping(value = "/blog_article", method = RequestMethod.GET)
+    Response<PageInfo<BlogArticleDetailVM>> select(@RequestParam(value = "page", required = false) Integer page,
+                                                   @RequestParam(value = "size", required = false) Integer size);
 
 
     /**

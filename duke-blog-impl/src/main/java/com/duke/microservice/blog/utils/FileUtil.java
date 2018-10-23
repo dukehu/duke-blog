@@ -30,7 +30,7 @@ public class FileUtil {
     public static String getRelativeFilePath(String serviceId) {
         Calendar calendar = Calendar.getInstance();
         // 如："/blog/2018/07/02"
-        return "/" + serviceId +
+        return "/nologin/" + serviceId +
                 "/" + calendar.get(Calendar.YEAR) +
                 "/" + (calendar.get(Calendar.MONTH) + 1) +
                 "/" + calendar.get(Calendar.DATE);
