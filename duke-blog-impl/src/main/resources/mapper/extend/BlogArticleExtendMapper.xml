@@ -37,12 +37,12 @@
     <select id="latestRecommendedArticles"
             resultType="com.duke.microservice.blog.domain.extend.BlogArticleList">
         select id as id, title as title
-        from blog_article order by create_time desc limit 5;
+        from blog_article where user_id = #{userId, jdbcType=VARCHAR} order by create_time desc limit 5;
     </select>
 
     <select id="archiveQuery" resultType="com.duke.microservice.blog.domain.extend.BlogArticleList">
         select id as id, title as title, create_time as publishTime
-        from blog_article order by create_time desc;
+        from blog_article where user_id = #{userId, jdbcType=VARCHAR}  order by create_time desc;
     </select>
 
     <select id="selectPreviousArticles" resultType="com.duke.microservice.blog.domain.extend.BlogArticleDetail">

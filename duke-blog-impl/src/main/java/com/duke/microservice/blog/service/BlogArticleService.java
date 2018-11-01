@@ -1,17 +1,16 @@
 package com.duke.microservice.blog.service;
 
 import com.duke.framework.CoreConstants;
-import com.duke.framework.domain.DBProperties;
 import com.duke.framework.exception.BusinessException;
 import com.duke.framework.security.AuthUserDetails;
-import com.duke.framework.utils.OperationCodeUtils;
+import com.duke.framework.utils.FileUtils;
 import com.duke.framework.utils.SecurityUtils;
 import com.duke.framework.utils.ValidationUtils;
 import com.duke.microservice.blog.BlogConstants;
+import com.duke.microservice.blog.config.Md2PdfConfig;
 import com.duke.microservice.blog.domain.basic.BlogArticle;
 import com.duke.microservice.blog.domain.basic.BlogArticleLabelR;
 import com.duke.microservice.blog.domain.basic.BlogArticleTypeR;
-import com.duke.microservice.blog.domain.basic.BlogType;
 import com.duke.microservice.blog.domain.extend.BlogArticleDetail;
 import com.duke.microservice.blog.domain.extend.BlogArticleList;
 import com.duke.microservice.blog.mapper.basic.BlogArticleMapper;
@@ -20,7 +19,6 @@ import com.duke.microservice.blog.vm.BlogArticleDetailVM;
 import com.duke.microservice.blog.vm.BlogArticleSetVM;
 import com.duke.microservice.blog.vm.BlogLabelVM;
 import com.duke.microservice.blog.vm.BlogTypeVM;
-import com.duke.microservice.blog.web.controller.BlogArticleController;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -32,7 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
-import java.sql.SQLException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,29 +46,22 @@ import java.util.stream.Collectors;
 public class BlogArticleService {
 
     @Autowired
+    public Md2PdfService md2PdfService;
+    @Autowired
     private BlogArticleMapper blogArticleMapper;
-
     @Autowired
     private BlogArticleExtendMapper blogArticleExtendMapper;
-
     @Autowired
     private BlogLabelService blogLabelService;
-
     @Autowired
     private BlogTypeService blogTypeService;
-
     @Autowired
     private BlogArticleLabelRService blogArticleLabelRService;
-
     @Autowired
     private BlogArticleTypeRService blogArticleTypeRService;
 
     public static void main(String[] args) {
-        try {
-            OperationCodeUtils.createOperationCodeSqlFile(new DBProperties("localhost:3306", "duke_auth", "root", "duke"), "duke-blog", BlogArticleController.class);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        // OperationCodeUtils.createOperationCodeSqlFile(new DBProperties("localhost:3306", "duke_auth", "root", "duke"), "duke-blog", BlogArticleController.class);
     }
 
     /**
@@ -301,18 +294,7 @@ public class BlogArticleService {
      */
     @Transactional(readOnly = true)
     public PageInfo<BlogArticleDetailVM> select(Integer page, Integer size, String tag, String type, boolean needLogin) {
-        String userId = "b66a3fe7-8fdd-11e8-bcd8-18dbf21f6c28";
-        try {
-            // 获取用户信息
-            AuthUserDetails authUserDetails = SecurityUtils.getCurrentUserInfo();
-            userId = authUserDetails.getUserId();
-        } catch (Exception e) {
-            if (needLogin) {
-                throw new BusinessException("无登录用户！");
-            } else {
-                log.info("无登录用户，查询所有");
-            }
-        }
+        String userId = this.getCurrentUserId(needLogin);
 
         if (ObjectUtils.isEmpty(page) || ObjectUtils.isEmpty(size)) {
             page = 0;
@@ -351,8 +333,9 @@ public class BlogArticleService {
      */
     @Transactional(readOnly = true)
     public List<BlogArticleDetailVM> latestRecommendedArticles() {
+        String userId = this.getCurrentUserId(false);
         List<BlogArticleDetailVM> blogArticleDetailVMS = new ArrayList<>();
-        List<BlogArticleList> blogArticleLists = blogArticleExtendMapper.latestRecommendedArticles();
+        List<BlogArticleList> blogArticleLists = blogArticleExtendMapper.latestRecommendedArticles(userId);
         if (!CollectionUtils.isEmpty(blogArticleLists)) {
             blogArticleLists.forEach(tmp -> {
                 BlogArticleDetailVM blogArticleDetailVM = new BlogArticleDetailVM(tmp.getId(), tmp.getTitle());
@@ -363,14 +346,37 @@ public class BlogArticleService {
     }
 
     /**
+     * 获取当前登陆用户id，如果没有登陆返回duke的id
+     *
+     * @param b b
+     * @return String
+     */
+    private String getCurrentUserId(boolean b) {
+        String userId = "b66a3fe7-8fdd-11e8-bcd8-18dbf21f6c28";
+        try {
+            // 获取用户信息
+            AuthUserDetails authUserDetails = SecurityUtils.getCurrentUserInfo();
+            userId = authUserDetails.getUserId();
+        } catch (Exception e) {
+            if (b) {
+                throw new BusinessException("无登录用户！");
+            } else {
+                log.info("无登录用户，查询所有");
+            }
+        }
+        return userId;
+    }
+
+    /**
      * 文章归档查询
      *
      * @return List<BlogArticleDetailVM>
      */
     @Transactional(readOnly = true)
     public List<BlogArticleDetailVM> archiveQuery() {
+        String userId = this.getCurrentUserId(false);
         List<BlogArticleDetailVM> blogArticleDetailVMS = new ArrayList<>();
-        List<BlogArticleList> blogArticleLists = blogArticleExtendMapper.archiveQuery();
+        List<BlogArticleList> blogArticleLists = blogArticleExtendMapper.archiveQuery(userId);
         if (!CollectionUtils.isEmpty(blogArticleLists)) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
             blogArticleLists.forEach(article -> {
@@ -380,5 +386,27 @@ public class BlogArticleService {
             });
         }
         return blogArticleDetailVMS;
+    }
+
+    /**
+     * 根据文章id将文章下载成pdf文件
+     *
+     * @param id 文章id
+     */
+    public void downloadPdfByArticleId(String id, HttpServletResponse response) {
+        BlogArticle blogArticle = this.exit(id);
+        // 转换
+        String pdfPath = md2PdfService.convertOfContent(blogArticle.getHtmlContent(), blogArticle.getTitle());
+        // 下载
+        File file = new File(pdfPath);
+        try {
+            FileUtils.readDownloadFile(response, blogArticle.getTitle() + ".pdf", file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // 删除
+            FileUtils.delete(Md2PdfConfig.getPdfFolderPath() + blogArticle.getTitle() + ".pdf");
+        }
+
     }
 }

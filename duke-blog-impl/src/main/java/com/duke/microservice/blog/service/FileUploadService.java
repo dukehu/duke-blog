@@ -1,6 +1,7 @@
 package com.duke.microservice.blog.service;
 
 import com.duke.framework.security.AuthUserDetails;
+import com.duke.framework.utils.FileUtils;
 import com.duke.framework.utils.SecurityUtils;
 import com.duke.framework.utils.ValidationUtils;
 import com.duke.microservice.blog.BlogConstants;
@@ -8,7 +9,6 @@ import com.duke.microservice.blog.BlogProperties;
 import com.duke.microservice.blog.domain.basic.Storage;
 import com.duke.microservice.blog.mapper.basic.StorageMapper;
 import com.duke.microservice.blog.mapper.extend.StorageExtendMapper;
-import com.duke.microservice.blog.utils.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,12 +63,12 @@ public class FileUploadService {
         // 文件名称，如time.png
         String originalFileName = multipartFile.getOriginalFilename();
         // 街截取文件后缀
-        String fileSuffix = FileUtil.getFileSuffix(originalFileName);
+        String fileSuffix = FileUtils.getFileSuffix(originalFileName);
         // 文件名称，去后缀
-        String fileName = FileUtil.getFileName(originalFileName);
+        String fileName = FileUtils.getFileName(originalFileName);
         // todo 校验文件名称长度
 
-        String relativeFilePath = FileUtil.getRelativeFilePath(serviceId);
+        String relativeFilePath = FileUtils.getRelativeFilePath(serviceId);
         File file = new File(blogProperties.getStorage().getPath() + relativeFilePath);
 
         if (!file.exists()) {

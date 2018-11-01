@@ -35,16 +35,18 @@ public interface BlogArticleExtendMapper {
     /**
      * 最新文章推荐
      *
+     * @param userId 当前用户id
      * @return List<BlogArticleList>
      */
-    List<BlogArticleList> latestRecommendedArticles();
+    List<BlogArticleList> latestRecommendedArticles(@Param("userId") String userId);
 
     /**
      * 文章归档查询
      *
+     * @param userId 当前用户id
      * @return List<BlogArticleList>
      */
-    List<BlogArticleList> archiveQuery();
+    List<BlogArticleList> archiveQuery(@Param("userId") String userId);
 
     /**
      * 查询当前文章创建时间之前的文章
@@ -64,6 +66,7 @@ public interface BlogArticleExtendMapper {
 
     /**
      * 根据id查找
+     *
      * @param id 主键
      * @return BlogArticleDetail
      */

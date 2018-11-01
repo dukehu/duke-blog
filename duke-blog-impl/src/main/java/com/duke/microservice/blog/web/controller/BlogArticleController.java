@@ -7,15 +7,12 @@ import com.duke.microservice.blog.service.BlogArticleService;
 import com.duke.microservice.blog.vm.BlogArticleDetailVM;
 import com.duke.microservice.blog.vm.BlogArticleSetVM;
 import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -110,5 +107,16 @@ public class BlogArticleController implements BlogArticleRestService {
     @Override
     public Response<List<BlogArticleDetailVM>> archiveQuery() {
         return Response.ok(blogArticleService.archiveQuery());
+    }
+
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id", value = "id", dataType = "string", paramType = "path", required = true),
+    })
+    @ApiOperation(value = "下载pdf", response = String.class)
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success")})
+    @RequestMapping(value = "/nologin/blog_article/download/pdf/{id}", method = RequestMethod.POST)
+    public void download(@PathVariable(value = "id", required = false) String id,
+                         HttpServletResponse response) {
+        blogArticleService.downloadPdfByArticleId(id, response);
     }
 }
