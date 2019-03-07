@@ -1,5 +1,6 @@
 package com.duke.microservice.blog.domain.extend;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +16,6 @@ public class BlogArticleList {
     private String title;
     private String summary;
     private Date publishTime;
+    private Integer year;
     private Integer articleViews;
 }

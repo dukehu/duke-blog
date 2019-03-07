@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created duke on 2018/6/23
@@ -102,5 +103,5 @@ public interface BlogArticleRestService {
      * @return List<BlogArticleDetailVM>
      */
     @RequestMapping(value = "/nologin/archive_query", method = RequestMethod.GET)
-    Response<List<BlogArticleDetailVM>> archiveQuery();
+    Response<Map<Integer, List<BlogArticleDetailVM>>> archiveQuery();
 }

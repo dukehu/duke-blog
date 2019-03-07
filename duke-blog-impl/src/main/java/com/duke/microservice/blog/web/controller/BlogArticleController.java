@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created duke on 2018/6/23
@@ -105,7 +106,7 @@ public class BlogArticleController implements BlogArticleRestService {
 
     @ApiOperation(value = "文章归档查询", notes = "文章归档查询")
     @Override
-    public Response<List<BlogArticleDetailVM>> archiveQuery() {
+    public Response<Map<Integer, List<BlogArticleDetailVM>>> archiveQuery() {
         return Response.ok(blogArticleService.archiveQuery());
     }
 

@@ -373,19 +373,28 @@ public class BlogArticleService {
      * @return List<BlogArticleDetailVM>
      */
     @Transactional(readOnly = true)
-    public List<BlogArticleDetailVM> archiveQuery() {
+    public Map<Integer, List<BlogArticleDetailVM>> archiveQuery() {
         String userId = this.getCurrentUserId(false);
-        List<BlogArticleDetailVM> blogArticleDetailVMS = new ArrayList<>();
         List<BlogArticleList> blogArticleLists = blogArticleExtendMapper.archiveQuery(userId);
-        if (!CollectionUtils.isEmpty(blogArticleLists)) {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
-            blogArticleLists.forEach(article -> {
+        Map<Integer, List<BlogArticleList>> blogArticleMap = blogArticleLists.stream().collect(Collectors.groupingBy(BlogArticleList::getYear));
+        Map<Integer, List<BlogArticleDetailVM>> tmpReturnMap = new HashMap<>(blogArticleMap.size());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
+        for (Integer year : blogArticleMap.keySet()) {
+            List<BlogArticleDetailVM> blogArticleDetailVMS = new ArrayList<>();
+            List<BlogArticleList> tmp = blogArticleMap.get(year);
+            tmp.sort(Comparator.comparing(BlogArticleList::getPublishTime).reversed());
+            tmp.forEach(article -> {
                 String title = simpleDateFormat.format(article.getPublishTime()) + " " + article.getTitle();
                 BlogArticleDetailVM blogArticleDetailVM = new BlogArticleDetailVM(article.getId(), title);
                 blogArticleDetailVMS.add(blogArticleDetailVM);
             });
+            tmpReturnMap.put(year, blogArticleDetailVMS);
         }
-        return blogArticleDetailVMS;
+        Map<Integer, List<BlogArticleDetailVM>> returnMap = new HashMap<>(blogArticleMap.size());
+
+        tmpReturnMap.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey()).forEachOrdered(e -> returnMap.put(e.getKey(), e.getValue()));
+        return returnMap;
     }
 
     /**

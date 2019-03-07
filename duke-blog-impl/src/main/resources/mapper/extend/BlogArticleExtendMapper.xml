@@ -41,8 +41,12 @@
     </select>
 
     <select id="archiveQuery" resultType="com.duke.microservice.blog.domain.extend.BlogArticleList">
-        select id as id, title as title, create_time as publishTime
-        from blog_article where user_id = #{userId, jdbcType=VARCHAR}  order by create_time desc;
+        select t.id as id, t.title as title, t.year as `year`, t.create_time as publishTime
+        from (
+                 select a.*, date_format(a.create_time, '%Y') as year
+                 from blog_article a
+                 where user_id = #{userId, jdbcType=VARCHAR}) as t
+        order by t.create_time desc;
     </select>
 
     <select id="selectPreviousArticles" resultType="com.duke.microservice.blog.domain.extend.BlogArticleDetail">
