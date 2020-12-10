@@ -32,8 +32,8 @@ public class FileUploadController {
             @ApiImplicitParam(name = "md5", value = "文件md5值", dataType = "string", paramType = "query")
     })
     @ApiOperation(value = "单文件上传", notes = "单文件上传")
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    @PreAuthorize("hasAuthority('admin') or hasAuthority('storage_upload_fileUpload')")
+    @RequestMapping(value = "/nologin/upload", method = RequestMethod.POST)
+//    @PreAuthorize("hasAuthority('admin') or hasAuthority('storage_upload_fileUpload')")
     public Response<String> fileUpload(@RequestParam(value = "file", required = false) MultipartFile file,
                                        @RequestParam(value = "serviceId", required = false) String serviceId,
                                        @RequestParam(value = "md5", required = false) String md5,

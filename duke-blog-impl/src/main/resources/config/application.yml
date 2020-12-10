@@ -23,7 +23,6 @@ security:
   oauth2:
     resource:
       service-id: duke-auth
-      user-info-uri: http://localhost:5285/auth/user/duke-blog
 
 management:
   security:

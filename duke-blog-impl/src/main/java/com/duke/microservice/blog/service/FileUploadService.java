@@ -53,8 +53,8 @@ public class FileUploadService {
      */
     public String fileUpload(MultipartFile multipartFile, String serviceId, String md5) {
         // todo 获得用户信息
-        AuthUserDetails authUserDetails = SecurityUtils.getCurrentUserInfo();
-        String userId = authUserDetails.getUserId();
+//        AuthUserDetails authUserDetails = SecurityUtils.getCurrentUserInfo();
+        String userId = "1";
         ValidationUtils.notEmpty(multipartFile, "multipartFile", "文件不可为空！");
         ValidationUtils.notEmpty(serviceId, "serviceId", "服务id不可为空！");
 

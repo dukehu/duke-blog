@@ -39,3 +39,8 @@ duke:
         secretKey: 8uZC6BRXqHRHJ6XL-degwFVM8y_VZr6pwJSIbfJX
         bucket: duke-blog  #创建的存储空间名
         path:     #存储空间的访问域名
+
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://dukehu.top:5285/user/duke-blog
